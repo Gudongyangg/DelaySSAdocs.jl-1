@@ -1,0 +1,13 @@
+name = "DelaySSAdocs"
+uuid = "2c9f62c1-f84b-458d-9e7e-8bcc154ad404"
+authors = ["Xiaoming Fu"]
+version = "0.1.0"
+
+[compat]
+julia = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
