@@ -1,11 +1,12 @@
 # Delay Direct Method Algorithm 
 
-The number of discarded $\Delta$ will be approximately equal to the number of delayed reactions that initiate. This follows because, other than the stored completions at the time the code terminates, every delayed completion will cause one computed $\Delta$ to be discarded. Thus, Cai [1] developped an algorithm, called the Direct Method for systems with delays, in which no random variables are discarded.
+  The number of discarded $\Delta$ will be approximately equal to the number of delayed reactions that initiate. This follows because, other than the stored completions at the time the code terminates, every delayed completion will cause one computed $\Delta$ to be discarded. Thus, Cai [1] developped an algorithm, called the Direct Method for systems with delays, in which no random variables are discarded.
 
-The principle of Direct Method is the same as that of the original Gillespie Algorithm and the Rejection Method above: use one random variable to calculate when the next reaction initiates and use another random variable to calculate which reaction occurs at that future time. However, Direct Method updates the state of the system and propensity functions due to stored delayed reactions during the search for the next initiation time. In this way he ensures that no random variables are discarded as in the Rejection Method. 
+  The principle of Direct Method is the same as that of the original Gillespie Algorithm and the Rejection Method above: use one random variable to calculate when the next reaction initiates and use another random variable to calculate which reaction occurs at that future time. However, Direct Method updates the state of the system and propensity functions due to stored delayed reactions during the search for the next initiation time. In this way he ensures that no random variables are discarded as in the Rejection Method. 
 
 ## Algorithm
-Suppose that at time $t$ there are ongoing delayed reactions set to complete at times $t+T_1, t+T_2, \ldots, t+T_d$. Define $T_0=0$ and $T_{d+1}=\infty$.
+
+  Suppose that at time $t$ there are ongoing delayed reactions set to complete at times $t+T_1, t+T_2, \ldots, t+T_d$. Define $T_0=0$ and $T_{d+1}=\infty$.
 
 Define *Tstruct*, whose *i*-th $(i=1,\dots,d)$ row stores $T_i$ and the index, $\mu_i$, of the reaction that $T_i$ is associated with.
 1. Initialize. Set the initial number of molecules of each species and set  $t=0$. Clear *Tstruct*.
@@ -23,7 +24,7 @@ Define *Tstruct*, whose *i*-th $(i=1,\dots,d)$ row stores $T_i$ and the index, $
        - If $i<d$
          - Calculate propensity $a_k(t+T_{i+1})$ due to the finish of the delayed reaction at $t+T_{i+1}$ and calculate $a_0(t+T_{i+1})$.
          - Update $a_t=a_t+a_0(t+T_{i+1})(T_{i+1}-T_i)$.
-         - Update $F=1-e^{-a_t} $, $i=i+1$.
+         - Update $F=1-e^{-a_t}$, $i=i+1$.
        - Else
          - Set $F=1$
        - EndIf

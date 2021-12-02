@@ -1,12 +1,20 @@
 # Delay Modified Next Reaction Method Algorithm
 
-Because the initiations are still given by the firing times of independent Poisson processes. Therefore, if $T_k$ is the current internal time of $Y_k$, $P_k$ the first internal time after $T_k$ at which $Y_k$ fires, and the propensity function for the $k$th reaction channel is given by $a_k$, then the time until the next initiation of reaction $k$(assuming no other reactions initiate or complete) is still given by $\Delta t_k= (P_k−T_k)/a_k$. The only change to the algorithm will be in keeping track and storing the delayed completions. To each delayed reaction channel we therefore assign a vector, $s_k$, that stores the completion times of that reaction in ascending order. Thus, the time until there is a change in the state of the system, be it an initiation or a completion, will be given by:
+  No matter whether a reaction is contained in $\text{ND}$, $\text{CD}$, or $\text{ICD}$, the number ofinitiationsat absolute timetwill be given by
+```math
+\text{number of initiations of reaction } k \text{ by time } t = Y_k\Big(\int_{0}^{t} a_k(X(s)\Big)\, \mathrm{d}s)
+```
+where the $Y_k$ are independent, unit rate Poisson processes.
+
+  More specifically, if we define $T_k(t) =\int_{0}^{t} a_k(X(s))\, \mathrm{d}s$ for each *k*, then it is relevant for us to consider $Y_k(T_k(t))$. We will call $T_k(t)$ the "internal time" for reaction *k*.
+
+  Because the initiations are still given by the firing times of independent Poisson processes. Therefore, if $T_k$ is the current internal time of $Y_k$, $P_k$ the first internal time after $T_k$ at which $Y_k$ fires, and the propensity function for the $k$th reaction channel is given by $a_k$, then the time until the next initiation of reaction $k$(assuming no other reactions initiate or complete) is still given by $\Delta t_k= (P_k−T_k)/a_k$. The only change to the algorithm will be in keeping track and storing the delayed completions. To each delayed reaction channel we therefore assign a vector, $s_k$, that stores the completion times of that reaction in ascending order. Thus, the time until there is a change in the state of the system, be it an initiation or a completion, will be given by:
 ```math
 \Delta = \min\{\Delta t_k, s_k(1) − t\}
 ```
-where $t$ is the current time of the system. These ideas form the heart of our Next Reaction Method [4] for systems with delays.
+where $t$ is the current time of the system. These ideas form the heart of our Next Reaction Method [1] for systems with delays.
 
-### Pseudo code
+## Algorithm
 
 1. Initialize. Set the initial number of molecules of each species and set $t = 0$. For each $k \leq M$, set $P_k = 0$ and $T_k = 0$, and for each delayed reaction channel set $s_k = [\infty]$.
 2. Calculate the propensity function, $a_k$, for each reaction.
