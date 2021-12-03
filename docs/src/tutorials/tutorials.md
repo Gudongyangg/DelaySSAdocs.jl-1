@@ -5,10 +5,6 @@ This tutorial is an introduction to using DelaySSA to define chemical reaction m
 S+I\xrightarrow{\rho}E+I\\
 I\stackrel{r}{\rightarrow}R
 ```
-<!-- $$
-S+I\xrightarrow{\rho}E+I\\
-I\stackrel{r}{\rightarrow}R
-$$ -->
 and $S+I\xrightarrow{\rho} R$ will trigger $E\Rightarrow I$ after $\tau$ time.
 
 ## Model Initialisasion
