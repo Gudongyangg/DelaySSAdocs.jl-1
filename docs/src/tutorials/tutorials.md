@@ -9,7 +9,7 @@ I\stackrel{r}{\rightarrow}R
 S+I\xrightarrow{\rho}E+I\\
 I\stackrel{r}{\rightarrow}R
 $$ -->
-and $I\stackrel{r}{\rightarrow}R$ will trigger $E\Rightarrow I$ after $\tau$ time (有问题)
+and $S+I\xrightarrow{\rho} R$ will trigger $E\Rightarrow I$ after $\tau$ time.
 
 ## Model Initialisasion
 
@@ -154,4 +154,4 @@ sol = solve(djprob, SSAStepper(), seed = 1234)
 using Plots
 fig = plot(sol, label = ["S" "I" "E" "R"], linewidth = 3, legend = :top, ylabel = "# of individuals", xlabel = "Time", fmt=:svg)
 ```
-
+![seir](../assets/seir.svg)
