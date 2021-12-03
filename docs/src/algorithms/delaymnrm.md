@@ -1,6 +1,6 @@
 # Delay Modified Next Reaction Method Algorithm
 
-  No matter whether a reaction is contained in $\text{ND}$, $\text{CD}$, or $\text{ICD}$, the number ofinitiationsat absolute timetwill be given by
+  No matter whether a reaction is contained in $\text{ND}$, $\text{CD}$, or $\text{ICD}$, the number of initiations at absolute time $t$ will be given by
 ```math
 \text{number of initiations of reaction } k \text{ by time } t = Y_k\Big(\int_{0}^{t} a_k(X(s)\Big)\, \mathrm{d}s)
 ```
@@ -36,6 +36,8 @@ where $t$ is the current time of the system. These ideas form the heart of our N
 12. If reaction $\mu$ initiated, let $r$ be uniform$(0,1)$ and set $P_\mu = P_\mu + \ln(1/r)$.
 13. Recalculate the propensity functions, $a_k$.
 14. Return to step 4 or quit.
+
+## Reference
 
 [1] David F. Anderson, "A modified Next Reaction Method for simulating chemical systems with time dependent propensities and delays", The Journal of Chemical Physics 128, 109903(2008).
 [https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998).
