@@ -10,9 +10,9 @@ The model is defined as follows:
 and $\emptyset \xrightarrow{J_1(Y)} X$ will trigger $X\Rightarrow Y$ after $\tau$ time.
 
 According to [Neural network aided approximation and parameter inference of non-Markovian models of gene expression](https://www.nature.com/articles/s41467-021-22919-1), it's an Illustration of a model of auto-regulation whereby a protein $X$ is transcribed by a gene, then it is transformed after a delay time $\tau$ into a mature protein $Y$, which binds the promoter and represses transcription of $X$. The function $J_1(Y)$ and $J_2(Y)$ can be defined as follows:
-$$
+```math
 J_1(Y)=k_1S\frac{K^p_d}{K^p_d+Y^p}\\J_2(Y)=k_2E_T\frac{Y}{K_m+Y}
-$$
+```
 In this example, we assume $k_1=k_2=S=E_T=K_d=P=K_m=1$ for convenience.
 
 ### Define a `JumpSet`
@@ -73,7 +73,7 @@ delay_interrupt = Dict()
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 ```
 
-We can see how to define the  `DelayJumpSet` in [this example](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/bursty/)
+We can see how to define the  `DelayJumpSet` in [this example](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/bursty/).
 
 So we can define the `DelayJumpProblem`
 
@@ -104,6 +104,7 @@ plot(sol_1.t,[sol_1.u[i][2] for i in eachindex(sol_1.u)],alpha=0.3, label="traje
 plot!(sol_2.t,[sol_2.u[i][2] for i in eachindex(sol_2.u)], label="trajectory2 of Y",linewidth = 2, line=:dash, legend = :topright)
 ```
 ![oscillator2](../assets/oscillator2.svg)
+
 Then we simulate $10^4$ trajectories and calculate the evolution of mean value for each reactant.
 
 ```julia
@@ -127,7 +128,7 @@ If we want to see how $Y$ varies when the number of $X$ changes, we will find so
     plot(mean_X,mean_Y,0,i, linewidth=range(0, 5, length = 200),seriesalpha=range(0, 1, length = 200),xlim=(0,21),ylim=(0,7),label=false,xlabel="X",ylabel="Y")
 end
 ```
-<img src="../assets/oscillator4.gif" />
+![oscillator4](../assets/oscillator4.gif)
 
 ## [Reference](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/delay_degradation/#Reference)
 
