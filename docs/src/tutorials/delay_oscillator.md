@@ -1,4 +1,4 @@
-# Delay Oscillator
+# A delay-induced oscillator
 Let us study the following delay oscillatory network.
 ## Model definition
 
@@ -92,17 +92,8 @@ sol_1 = solve(djprob, SSAStepper(), seed = 12345)
 sol_2 = solve(djprob, SSAStepper(), seed = 1234)
 ```
 
-```julia
-plot(sol_1.t,[sol_1.u[i][1] for i in eachindex(sol_1.u)],alpha=0.4, label="trajectory1 of X",linewidth = 3, legend = :top, ylabel = "# of individuals", xlabel = "Time", fmt=:svg)
-plot!(sol_2.t,[sol_2.u[i][1] for i in eachindex(sol_2.u)], label="trajectory2 of X",linewidth = 3, line=:dash, legend = :topright)
-```
 ![oscillator1](../assets/oscillator1.svg)
 
-
-```julia
-plot(sol_1.t,[sol_1.u[i][2] for i in eachindex(sol_1.u)],alpha=0.3, label="trajectory1 of Y",linewidth = 2, legend = :top, ylabel = "# of individuals", xlabel = "Time", fmt=:svg)
-plot!(sol_2.t,[sol_2.u[i][2] for i in eachindex(sol_2.u)], label="trajectory2 of Y",linewidth = 2, line=:dash, legend = :topright)
-```
 ![oscillator2](../assets/oscillator2.svg)
 
 Then we simulate $10^4$ trajectories and calculate the evolution of mean value for each reactant.
@@ -112,22 +103,12 @@ using StatsBase
 Sample_size = Int(1e4)
 ens_prob = EnsembleProblem(djprob)
 ens =@time solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = Sample_size, saveat = .1, save_delay_channel =false)
-mean_X(t) = mean([ens[s](t)[1] for s in 1:Sample_size])
-mean_Y(t) = mean([ens[s](t)[2] for s in 1:Sample_size])
-timestamps=0:0.1:tf
-plot(timestamps,mean_X.(timestamps),linewidth=3,line=:dash,label="X",xlabel="time",ylabel="Mean Value")
-plot!(timestamps,mean_Y.(timestamps),linewidth=3,line=:dash, legend = :topright,label="Y")
 ```
 ![oscillator3](../assets/oscillator3.svg)
 
 
 If we want to see how $Y$ varies when the number of $X$ changes, we will find something interesting.
 
-```julia
-@gif for i in 1:200
-    plot(mean_X,mean_Y,0,i, linewidth=range(0, 5, length = 200),seriesalpha=range(0, 1, length = 200),xlim=(0,21),ylim=(0,7),label=false,xlabel="X",ylabel="Y")
-end
-```
 ![oscillator4](../assets/oscillator4.gif)
 
 ## [Reference](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/delay_degradation/#Reference)
