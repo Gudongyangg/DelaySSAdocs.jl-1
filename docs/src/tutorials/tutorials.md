@@ -27,7 +27,7 @@ We can easily obtain `Jumpsystem` from the reaction network `rn` that is previou
 ```julia
 jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws=false)
 ```
-where `combinatoric_ratelaws` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie, and hence need to be rescaled. *The default, `scale_rates=true`, corresponds to rescaling the passed in rate constants.* When using `MassActionJump` the default behavior is to assume rate constants correspond to stochastic rate constants in the sense used by Gillespie [1]. This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function constructed by `MassActionJump` would be `k*A*(A-1)/2!`. For a trimolecular reaction like $3A \overset{k}{\rightarrow} B$ the rate function would be `k*A*(A-1)*(A-2)/3!`. To *avoid* having the reaction rates rescaled (by `1/2` and `1/6` for these two examples), one can pass the `JumpSystem` constructor the optional named parameter `combinatoric_ratelaws=false` see [Reaction rate laws used in simulations](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/#Reaction-rate-laws-used-in-simulations) for details.
+where `combinatoric_ratelaws` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie, and hence need to be rescaled. The default, `combinatoric_ratelaws=true`, corresponds to rescaling the passed in rate constants. The default behavior is to assume rate constants correspond to stochastic rate constants in the sense used by Gillespie [1]. This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function constructed by `MassActionJump` would be `k*A*(A-1)/2!`. For a trimolecular reaction like $3A \overset{k}{\rightarrow} B$ the rate function would be `k*A*(A-1)*(A-2)/3!`. To *avoid* having the reaction rates rescaled (by `1/2` and `1/6` for these two examples), one can pass the `JumpSystem` constructor the optional named parameter `combinatoric_ratelaws=false` see [Reaction rate laws used in simulations](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/#Reaction-rate-laws-used-in-simulations) for details.
 
 With the initial conditions, we can then define `DiscreteProblem`
 ```julia
@@ -52,7 +52,7 @@ delay_interrupt = Dict()
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 ```
 - `delay_trigger::Dict`  A dictionary that contains
-  - Keys: Indices of reactions defined in `JumpSystem` that can trigger the delay reaction see [indices in the `JumpSystem`](@ref indice_notice). Here we have the first reaction $S+I\Rightarrow E+ I$ that will trigger the transfer from $E$ to $I$ after time $\tau$, thus the key here is `1`.
+  - Keys: Indices of reactions defined in `JumpSystem` that can trigger the delay reaction see [indices in the `JumpSystem`](@ref indice_notice). Here we have the first reaction $S+I\Rightarrow E+ I$ that will trigger the transfer from $E$ to $I$ after time $\tau$, hence the key here is `1`.
   
   - Values: A update function that determines how to update the delay channel. In this example, once the delay reaction is trigged, the first delay channel will be added a delay time $\tau$.
   
@@ -66,7 +66,7 @@ We can see more details in [Defining a `DelayJumpSet`(bursty)](https://palmtree2
 
 ### [Remark on Reaction Indices](@id indice_notice) 
 !!! warning
-    `JumpSystem` will change the order of the reactions that is arranged in your reaction network. Internally, all MassActionJumps are ordered before ConstantRateJumps (with the latter internally ordered in the same order they were passed in). The same principle applies for the construction of `JumpSet`.
+    `JumpSystem` might change the order of the reactions that is arranged in your reaction network. Internally, all MassActionJumps are ordered before ConstantRateJumps (with the latter internally ordered in the same order they were passed in). The same principle applies for the construction of `JumpSet`.
 
 At last, we can define the `DelayJumpProblem` by 
 ```julia
