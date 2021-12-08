@@ -41,7 +41,7 @@ dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 ```
 where `DiscreteProblem` inputs `jumpsys`, and the initial condition of reactants `u0` , the simulation timespan `tspan` and the reaction rates `ps`.
 
-Here the **delay reation** comes in, we define the `DelayJumpSet` by
+Here comes **delay reation**. We define the `DelayJumpSet` by
 ```julia
 delay_trigger_affect! = function (integrator, rng)
     append!(integrator.de_chan[1], τ)
