@@ -88,10 +88,9 @@ where `DelayJumpProblem` inputs `DiscreteProblem`, `JumpSet`,`DelayJumpSet`, the
 Now we can solve the problem and plot two trajectories of $X$ and $Y$.
 
 ```julia
-sol_1 = solve(djprob, SSAStepper(), seed = 12345)
-sol_2 = solve(djprob, SSAStepper(), seed = 1234)
+sol_1 = solve(djprob, SSAStepper())
+sol_2 = solve(djprob, SSAStepper())
 ```
-
 ![oscillator1](../assets/oscillator1.svg)
 
 ![oscillator2](../assets/oscillator2.svg)
@@ -102,15 +101,14 @@ Then we simulate $10^4$ trajectories and calculate the evolution of mean value f
 using StatsBase
 Sample_size = Int(1e4)
 ens_prob = EnsembleProblem(djprob)
-ens =@time solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = Sample_size, saveat = .1, save_delay_channel =false)
+ens = solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = Sample_size, saveat = .1, save_delay_channel =false)
 ```
 ![oscillator3](../assets/oscillator3.svg)
 
-
-If we want to see how $Y$ varies when the number of $X$ changes, we will find something interesting.
+If we want to see how $Y$ varies accoring to the number of $X$, we will find the following oscillary orbit in the phase diagram.
 
 ![oscillator4](../assets/oscillator4.gif)
 
-## [Reference](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/delay_degradation/#Reference)
+## Reference
 
-[1]Jiang, Q., Fu, X., Yan, S. *et al.* Neural network aided approximation and parameter inference of non-Markovian models of gene expression. *Nat Commun* **12,** 2618 (2021). https://doi.org/10.1038/s41467-021-22919-1
+[1] Qingchao Jiang#, Xiaoming Fu#, Shifu Yan#, Runlai Li, Wenli Du, Zhixing Cao*, Feng Qian, Ramon Grima*, "Neural network aided approximation and parameter inference of non-Markovian models of gene expression". Nature communications, (2021) 12(1), 1-12. [https://doi.org/10.1038/s41467-021-22919-1](https://doi.org/10.1038/s41467-021-22919-1)
