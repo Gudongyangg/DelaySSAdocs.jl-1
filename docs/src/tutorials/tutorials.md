@@ -65,7 +65,8 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 We can see more details in [Defining a `DelayJumpSet`(bursty)](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/bursty/#Defining-a-DelayJumpSet) and [Defining a `DelayJumpSet`(birth-death example)](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/delay_degradation/#Defining-a-DelayJumpSet).
 
 ### [Remark on Reaction Indices](@id indice_notice) 
-!!! warning `JumpSystem` will change the order of the reactions that is arranged in your reaction network. Internally, all MassActionJumps are ordered before ConstantRateJumps (with the latter internally ordered in the same order they were passed in). The same principle applies for the construction of `JumpSet`.
+!!! warning
+    `JumpSystem` will change the order of the reactions that is arranged in your reaction network. Internally, all MassActionJumps are ordered before ConstantRateJumps (with the latter internally ordered in the same order they were passed in). The same principle applies for the construction of `JumpSet`.
 
 At last, we can define the `DelayJumpProblem` by 
 ```julia
