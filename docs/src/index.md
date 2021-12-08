@@ -6,13 +6,15 @@ CurrentModule = DelaySSAdocs
 
 Gillespie developed a stochastic simulation algorithm (SSA) to simulate stochastic dynamics of chemically reacting systems [1]. In SSA algorithm, it is assumed that all reactions occur instantaneously. While in many biochemical reactions, such as gene transcription and translation, it can take certain time to finish after the reactions are initiated [2]. Neglecting delays in certain cases may still produce acceptable results, but in some delay-sensitive cases, such as delay-induced oscillators, neglecting delays in simulation will lead to erroneous conclusions. To solve this problem, an exact SSA for chemical reaction systems with delays，Delay SSA [3-5] was proposed, based upon the same fundamental premise of stochastic kinetics used by Gillespie in the development of his SSA.
 
-`DelaySSAToolkit.jl` is a tool developed on top of `DiffEqJump.jl` which solves the stochastic simulation with **delay** and contains the following features:
+
+DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) which solves the stochastic simulation with **delay** and contains the following features:
+
 ## Features
 - Various delay stochastic simulation algorithms are provided;
 - Stochastic delay type is supported;
 - Multiple delay channels and simultaneous delay reactions are supported;
 - Priority queue and dependency graph are integrated for high computational performance;
-- Ecosystem with Catalyst, DiffEqJump, DifferentialEquations and more...
+- Ecosystem with [Catalyst](https://github.com/SciML/Catalyst.jl), [DiffEqJump](https://github.com/SciML/DiffEqJump.jl), [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) and more...
 
 ## Installation
 
