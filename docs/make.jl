@@ -22,6 +22,7 @@ makedocs(;
             "tutorials/delay_degradation.md",
             "tutorials/delay_multidegradation.md",
             "tutorials/delay_oscillator.md"
+            "tutorials/delay_stochastic.md"
             ],
         "Algorithm" => [
             "algorithms/notations.md",      
