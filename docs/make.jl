@@ -22,8 +22,8 @@ makedocs(;
             "tutorials/delay_degradation.md",
             "tutorials/delay_multidegradation.md",
             "tutorials/delay_oscillator.md",
-            "tutorials/delay_stochastic.md",
-            ],
+            "tutorials/stochastic_delay.md",
+        ],
         "Algorithm" => [
             "algorithms/notations.md",      
             "algorithms/delayrejection.md",      
