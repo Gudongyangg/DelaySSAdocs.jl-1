@@ -8,8 +8,7 @@ G^*\xrightarrow{\sigma_{\text{on}}} G\\
 G\xrightarrow{\sigma_{\text{off}}}G^*\\
 G\xrightarrow{\rho}G+N
 ```
-
-And $G\xrightarrow{\rho}G+N$ will trigger $N\Rightarrow \empty$ after $\tau$ time.  
+and $G\xrightarrow{\rho}G+N$ will trigger $N\Rightarrow \emptyset$ after $\tau$ time.  
 We set $\sigma_{\text{on}}=0.0282$, $\sigma_{\text{off}}=0.609$ and $\rho=2.11$.
 
 ### Define a `JumpSet`
