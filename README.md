@@ -5,12 +5,13 @@
 [![Build Status](https://github.com/palmtree2013/DelaySSAdocs.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/palmtree2013/DelaySSAdocs.jl/actions/workflows/CI.yml?query=branch%3Amain)
 <!-- [![Coverage](https://codecov.io/gh/palmtree2013/DelaySSAdocs.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/palmtree2013/DelaySSAdocs.jl) -->
 
-DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) which solves the stochastic simulation with **delay** and contains the following features:
+DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) in Julia which solves the stochastic simulation with **delay** and contains the following features:
 
 ## Features
 - Various delay stochastic simulation algorithms are provided;
 - Stochastic delay type is supported;
 - Multiple delay channels and simultaneous delay reactions are supported;
+- A cascade of delay reactions is supported (a delay reaction that incurs other delay reactions);
 - Priority queue and dependency graph are integrated for high computational performance;
 - Ecosystem with [Catalyst](https://github.com/SciML/Catalyst.jl), [DiffEqJump](https://github.com/SciML/DiffEqJump.jl), [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) and more...
 
