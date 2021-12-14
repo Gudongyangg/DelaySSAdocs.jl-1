@@ -32,7 +32,7 @@ More information is available in the [documentation](@ref DelaySSAToolkit_doc). 
 
 ## Examples
 ### SEIR model
-Check [this example](@ref seir_model) for more details.
+Check [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/) for more details.
 ```julia
 using DelaySSAToolkit, Catalyst
 using DiffEqJump
@@ -64,7 +64,7 @@ sol = solve(jprob, SSAStepper())
 ![seir](docs/src/assets/seir.svg)
 
 ### A bursty model [2]
-Check this [example](@ref bursty_model) for more details.
+Check this [example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/bursty/) for more details.
 ```julia
 using DelaySSAToolkit
 using Catalyst, DiffEqJump

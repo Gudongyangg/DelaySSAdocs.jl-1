@@ -13,7 +13,7 @@ What differs from the Markov process that can be modelled via SSA is the introdu
 
 ## First route: `JumpSystem + DiscreteProblem + DelayJumpSet`
 ### Markovian part
-[Catalyst.jl](https://github.com/SciML/Catalyst.jl) provides a comprehensive interface to modelling reaction networks in Julia and can be used to construct models fully-compatible with DelaySSAToolkit. For more details on how to construct a reaction network, we recommend reading [Catalyst's tutorial](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/). In our example, the [model](@id markov_model) can be defined as:
+[Catalyst.jl](https://github.com/SciML/Catalyst.jl) provides a comprehensive interface to modelling reaction networks in Julia and can be used to construct models fully-compatible with DelaySSAToolkit. For more details on how to construct a reaction network, we recommend reading [Catalyst's tutorial](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/). In our example, the model can be defined as:
 ```julia
 rn = @reaction_network begin
     ρ, S+I --> E+I
@@ -41,8 +41,8 @@ where `DiscreteProblem` inputs `jumpsys`, and the initial condition of reactants
 
 ### Non-Markovian part
 The non-Markovian part consists of three elements:
-- delay trigger reactions: those reactions in [the model](@ref markov_model) that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation.
-- delay interrupt reactions: those reactions in [the model](@ref markov_model) that change the state of the delay channels or/and the state of the reactants in the middle of on-going delay reactions.
+- delay trigger reactions: those reactions in the [Markovian part](@ref) that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation.
+- delay interrupt reactions: those reactions in the [Markovian part](@ref) that change the state of the delay channels or/and the state of the reactants in the middle of on-going delay reactions.
 - delay complete reactions: those reactions that are initiated by delay trigger reactions and change the state of the delay channels or/and the state of the reactants upon completion.
   
 With these three definitions in mind and based on this particular example, we define the `DelayJumpSet` by
@@ -66,7 +66,7 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
   - Keys: Indices of delay channels.
   - Values: A vector of `Pair`s, mapping species index to net change of stoichiometric coefficient.
 
-We refer to [Defining a `DelayJumpSet`(bursty)](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/bursty/#Defining-a-DelayJumpSet) and [Defining a `DelayJumpSet`(birth-death example)](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/delay_degradation/#Defining-a-DelayJumpSet) for more details.
+We refer to [Defining a `DelayJumpSet`](bursty.md/#Defining-a-DelayJumpSet) and [Defining a `DelayJumpSet`(birth-death example)](delay_degradation.md/#Defining-a-DelayJumpSet) for more details.
 
 ### [Remark on Reaction Indices](@id indice_notice) 
 !!! warning
