@@ -141,7 +141,7 @@ is a non-negative integer, then we have $\Delta \in [T_i,T_{i+1})$ and *i* delay
 
 We point out the following equivalence: 
 !!! note
-    In the delay direct method the event $\Delta \in [T_i,T_{i+1})$ for a given integer $i$ is equivalent to the event $\Delta_1,\Delta_2,\ldots,\Delta_i$ are rejected in the delay rejection method, and the time to the next event $\Delta_{i+1}$ is accepted, i.e. $\Delta_{i+1}+T_i=\Delta$.
+    For a given integer $i$, the event $\Delta \in [T_i,T_{i+1})$ in the delay direct method is equivalent to the event $\Delta_1,\Delta_2,\ldots,\Delta_i$ are rejected and the time to the next event $\Delta_{i+1}$ is accepted, i.e. $\Delta_{i+1}+T_i=\Delta$ in the delay rejection method.
 
 From the iterative procedure of generating $\Delta$ described
 above, we can find $P_0(\Delta)$ that the rejection method algorithm produces. Specifically, if $\Delta \in [T_i,T_{i+1})$, we have 
