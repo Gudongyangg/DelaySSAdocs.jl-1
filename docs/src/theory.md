@@ -30,7 +30,7 @@ For a chemical system in a given state $X(t)=\mathbf{x}$ at time $t$, assuming t
 \end{equation}
 ```
 
-Based upon the fundamental premise Eq. ([1](#mjx-eqn-1)), Gillespie showed that that $\Delta$ and $\mu$ are two independent random variables and have the following probability density functions ($\text{PDFs}$), respectively:
+Based upon the fundamental premise Eq. ([1](#mjx-eqn-1)), Gillespie showed that that $\Delta$ and $\mu$ are two independent random variables and have the following probability density functions (PDFs), respectively:
 
 ```math
 \begin{equation}
