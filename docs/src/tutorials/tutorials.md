@@ -12,7 +12,7 @@ and $S+I\xrightarrow{\rho} E+I$ will trigger $E\Rightarrow I$ after $\tau$ time,
 What differs from the Markov process that can be modelled via SSA is the introduction of **delay reactions**. To show how we incorporate the delay reactions into the Markovian system, we first need to define the Markovian part and then its non-Markovian part. These two parts mainly form a `DelayJumpProblem`. Here we show two routes to define our delay system, one way is based on `JumpSystem`, `DiscreteProblem` and `DelayJumpSet`, the other is based on `JumpSet`, `DiscreteProblem` and `DelayJumpSet`.
 
 ## First route: `JumpSystem + DiscreteProblem + DelayJumpSet`
-### Markovian part
+### [Markovian part](@id Markovian_part)
 [Catalyst.jl](https://github.com/SciML/Catalyst.jl) provides a comprehensive interface to modelling reaction networks in Julia and can be used to construct models fully-compatible with DelaySSAToolkit. For more details on how to construct a reaction network, we recommend reading [Catalyst's tutorial](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/). In our example, the model can be defined as:
 ```julia
 rn = @reaction_network begin
@@ -41,8 +41,8 @@ where `DiscreteProblem` inputs `jumpsys`, and the initial condition of reactants
 
 ### Non-Markovian part
 The non-Markovian part consists of three elements:
-- delay trigger reactions: those reactions in the [Markovian part](@ref) that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation.
-- delay interrupt reactions: those reactions in the [Markovian part](@ref) that change the state of the delay channels or/and the state of the reactants in the middle of on-going delay reactions.
+- delay trigger reactions: those reactions in the [Markovian part](@ref Markovian_part) that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation.
+- delay interrupt reactions: those reactions in the [Markovian part](@ref Markovian_part) that change the state of the delay channels or/and the state of the reactants in the middle of on-going delay reactions.
 - delay complete reactions: those reactions that are initiated by delay trigger reactions and change the state of the delay channels or/and the state of the reactants upon completion.
   
 With these three definitions in mind and based on this particular example, we define the `DelayJumpSet` by

@@ -32,7 +32,7 @@ More information is available in the [documentation](@ref DelaySSAToolkit_doc). 
 
 ## Examples
 ### SEIR model
-Check [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/) for more details.
+Check [this example](tutorials.md) for more details.
 ```julia
 using DelaySSAToolkit, Catalyst
 using DiffEqJump
