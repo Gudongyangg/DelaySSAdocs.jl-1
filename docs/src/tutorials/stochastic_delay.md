@@ -1,6 +1,6 @@
 # An example of stochastic delay 
 
-## Model definition
+## Model
 
 According to [[1]](https://www.nature.com/articles/s41467-021-22919-1), The gene can switch between active $G$ and inactive $G^*$ states, transcribes nascent mRNA (denoted by  $N$) while in the active state which subsequently is removed a time $\tau$ later. So we can define the model.
 ```math
@@ -11,7 +11,7 @@ G\xrightarrow{\rho}G+N
 and $G\xrightarrow{\rho}G+N$ will trigger $N\Rightarrow \emptyset$ after $\tau$ time.  
 We set $\sigma_{\text{on}}=0.0282$, $\sigma_{\text{off}}=0.609$ and $\rho=2.11$.
 
-### Define a `JumpSet`
+## Markovian part
 
 We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details).
 
@@ -23,8 +23,6 @@ mass_jump = MassActionJump(rate1, reactant_stoich, net_stoich; scale_rates =fals
 jumpset = JumpSet((),(),nothing,[mass_jump])
 ```
 
-### Define a `DiscreteProblem`
-
 Then we set the Initial value and define a `DiscreteProblem`.
 
 ```julia
@@ -35,7 +33,7 @@ tspan = (0,tf)
 dprob = DiscreteProblem(u0, tspan)
 ```
 
-### Defining `DelayJumpSet`
+## Non-Markovian part
 
 Different from other examples, the elongation time $\tau$ is a random variable sampled from two different lognormal distributions. We assume $\tau\sim \text{LogNormal}(0,2)+120$ and $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$. Here we take  $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$ for example.
 

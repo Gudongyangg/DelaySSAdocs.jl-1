@@ -1,6 +1,6 @@
 # A delay-induced oscillator
 Let us study the following delay oscillatory network.
-## Model definition
+## Model
 
 The model is defined as follows:
 ```math
@@ -15,7 +15,7 @@ J_1(Y)=k_1S\frac{K^p_d}{K^p_d+Y^p}\\J_2(Y)=k_2E_T\frac{Y}{K_m+Y}
 ```
 In this example, we assume $k_1=k_2=S=E_T=K_d=P=K_m=1$ for convenience.
 
-### Define a `JumpSet`
+## Markovian part
 
 Since the rate varies with the number of molecules of $Y$, we should define `ConstantRateJump`
 
@@ -43,8 +43,6 @@ Then we can define the `JumpSet`
 jumpset = JumpSet((),(cons_jump1,cons_jump2),nothing,nothing)
 ```
 
-### Define a `DiscreteProblem`
-
 Then we initialise the problem by setting
 
 ```julia
@@ -61,6 +59,7 @@ So we can define the `DiscreteProblem`
 dprob = DiscreteProblem(u0, tspan)
 ```
 
+## Non-Markovian part
 The same as we did before, we must define the `DelayJumpSet`
 
 ```julia
