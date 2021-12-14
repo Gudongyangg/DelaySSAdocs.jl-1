@@ -91,7 +91,7 @@ net_stoich = [[1=>-1,3=>1],[2=>-1,4=>1]]
 mass_jump = MassActionJump(rate1, reactant_stoich, net_stoich; scale_rates =false)
 jumpset = JumpSet((),(),nothing,mass_jump)
 ```
-We briefly explain the augments:
+We briefly explain the notations here:
 - `rates` is a vector of rates of reactions.
 - `reactant_stoich` is a vector whose `k`th entry is the reactant stoichiometry of the `k`th reaction. The reactant stoichiometry for an individual reaction is assumed to be represented as a vector of `Pair`s, mapping species id to stoichiometric coefficient.
 - `net_stoich`  is assumed to have the same type as `reactant_stoich`; a vector whose `k`th entry is the net stoichiometry of the `k`th reaction. The net stoichiometry for an individual reaction is again represented as a vector of `Pair`s, mapping species id to the net change in the species when the reaction occurs.
