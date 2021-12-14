@@ -5,7 +5,7 @@
 [![Build Status](https://github.com/palmtree2013/DelaySSAdocs.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/palmtree2013/DelaySSAdocs.jl/actions/workflows/CI.yml?query=branch%3Amain)
 <!-- [![Coverage](https://codecov.io/gh/palmtree2013/DelaySSAdocs.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/palmtree2013/DelaySSAdocs.jl) -->
 
-DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) in Julia which solves the stochastic simulation with **delay** and contains the following features:
+DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) in Julia which solves the stochastic simulation with delay and contains the following features:
 
 ## Features
 - Various delay stochastic simulation algorithms are provided;
@@ -28,11 +28,11 @@ Pkg.instantiate()
 ```
 for the first time after installation.
 
-More information is available in the [documentation](@ref DelaySSAToolkit_doc). Please feel free to open issues and submit pull requests!
+More information is available in the [documentation](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/). Please feel free to open issues and submit pull requests!
 
 ## Examples
 ### SEIR model
-Check [this example](tutorials.md) for more details.
+Check [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/) for more details.
 ```julia
 using DelaySSAToolkit, Catalyst
 using DiffEqJump
