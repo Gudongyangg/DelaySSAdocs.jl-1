@@ -139,6 +139,10 @@ Bratsun et al. [3] and Barrio et al. [4] used an algorithm for computing the ini
 The rejection algorithm essentially generates $\Delta$ in the event ([2](#mjx-eqn-2)) using a rejection method in an iterative fashion: in the *i*-th iteration, it generates a $\Delta_i$ according to an exponential PDF with parameter $a_0(t+T_{i−1})$, where we have denoted the time to next event generated in the *i*-th iteration as $\Delta_i$. If $\Delta_i < T_i - T_{i−1}$, then we have $\Delta = T_{i-1} + \Delta_i$ and the algorithm continues simulation to generate $\mu$; otherwise, it rejects $\Delta_i$, updates the state vector $X(t+T_i)$, calculates $a_k(t+T_i),k=1,\ldots,M$, and goes to the next iteration. If $\Delta$ is determined in the *(i+1)*-th iteration, where *i*
 is a non-negative integer, then we have $\Delta \in [T_i,T_{i+1})$ and *i* delayed reactions finished in the time interval $[t,t+\Delta)$. 
 
+We point out the following equivalence: 
+!!! Tip
+    In the delay direct method the event $\Delta \in [T_i,T_{i+1})$ for a given integer $i$ is equivalent to the event $\Delta_1,\Delta_2,\ldots,\Delta_i$ are rejected in the delay rejection method, and the time to the next event $\Delta_{i+1}$ is accepted, i.e. $\Delta_{i+1}+T_i=\Delta$.
+
 From the iterative procedure of generating $\Delta$ described
 above, we can find $P_0(\Delta)$ that the rejection method algorithm produces. Specifically, if $\Delta \in [T_i,T_{i+1})$, we have 
 ```math
