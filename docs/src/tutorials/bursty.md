@@ -1,4 +1,4 @@
-# A bursty model with delay
+# [A bursty model with delay](@id bursty_model)
 
 ## Model definition
 We study the following model which does not have an explicit gene state description

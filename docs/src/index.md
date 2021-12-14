@@ -2,7 +2,7 @@
 CurrentModule = DelaySSAdocs
 ```
 
-# DelaySSAToolkit
+# [DelaySSAToolkit](@id DelaySSAToolkit_doc)
 
 Gillespie developed a stochastic simulation algorithm (SSA) to simulate stochastic dynamics of chemically reacting systems [1]. In SSA algorithm, it is assumed that all reactions occur instantaneously. While in many biochemical reactions, such as gene transcription and translation, it can take certain time to finish after the reactions are initiated [2]. Neglecting delays in certain cases may still produce acceptable results, but in some delay-sensitive cases, such as delay-induced oscillators, neglecting delays in simulation will lead to erroneous conclusions. To solve this problem, an exact SSA for chemical reaction systems with delays，Delay SSA [3-5] was proposed, based upon the same fundamental premise of stochastic kinetics used by Gillespie in the development of his SSA.
 
