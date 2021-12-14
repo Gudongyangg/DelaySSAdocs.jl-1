@@ -140,7 +140,7 @@ The rejection algorithm essentially generates $\Delta$ in the event ([2](#mjx-eq
 is a non-negative integer, then we have $\Delta \in [T_i,T_{i+1})$ and *i* delayed reactions finished in the time interval $[t,t+\Delta)$. 
 
 We point out the following equivalence: 
-!!! Tip
+!!! note
     In the delay direct method the event $\Delta \in [T_i,T_{i+1})$ for a given integer $i$ is equivalent to the event $\Delta_1,\Delta_2,\ldots,\Delta_i$ are rejected in the delay rejection method, and the time to the next event $\Delta_{i+1}$ is accepted, i.e. $\Delta_{i+1}+T_i=\Delta$.
 
 From the iterative procedure of generating $\Delta$ described
