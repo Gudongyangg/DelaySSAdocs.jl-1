@@ -16,7 +16,7 @@ Simulation methods for systems with delays need to calculate when reactions init
    - Generate an independent uniform$(0,1)$ random number $r_2$.
    - Find $\mu\in[1,\ldots, m]$ such that
    ```math
-   \sum_{k=1}^{\mu-1} a_k(t) < r_2 a_0 < \sum_{k=1}^\mu a_k(t)
+   \sum_{k=1}^{\mu-1} a_k(t) < r_2 a_0 \leq \sum_{k=1}^\mu a_k(t)
    ```
    - If $\mu\in \text{ND}$, update the number of each molecular species according to reaction $\mu$.
    - If $\mu\in \text{CD}$, store the information that at time $t+\tau_\mu$ the system must be updated according to reaction $\mu$.
