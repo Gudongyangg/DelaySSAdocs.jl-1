@@ -1,6 +1,6 @@
 # A birth-death example with delay degradation
 
-## Model definition
+## Model
 
 The model is defined as follows: 1. $C:\emptyset \rightarrow X_A$; 2. $\gamma : X_A \rightarrow \emptyset$; 3. $\beta : X_A \rightarrow  X_I$, which triggers $X_I\Rightarrow \emptyset$ after $\tau$ time; 4. $\gamma: X_I \rightarrow \emptyset$, which causes the delay channel to change its state during a schduled delay reaction.
 
@@ -14,7 +14,7 @@ This example is studied by Lafuerza and Toral in [1], where one can solve the so
 where $a = β + γ$.
 
 We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details)
-
+## Markovian part
 ```julia
 C, γ, β, τ = [2., 0.1, 0.5, 15.]
 rate1 = [C,γ,β,γ]
@@ -25,7 +25,20 @@ jumpset = JumpSet((),(),nothing,[mass_jump])
 ```
 We refer to [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/#Markovian-part) for more details about the constuction of a `Jumpset`.
 
-### Defining a `DelayJumpSet`
+Then we initialise the problem by setting
+```julia
+u0 = [0, 0]
+tf = 30.
+saveat = .1
+de_chan0 = [[]]
+tspan = (0.,tf)
+```
+So we can define the `DiscreteProblem`
+```julia
+dprob = DiscreteProblem(u0, tspan)
+```
+
+## Non-Markovian part
 
 Then we turn to the definition of delay reactions
 
@@ -41,7 +54,7 @@ delay_affect! = function (de_chan, rng)
     deleteat!(de_chan[1],i)
 end
 delay_interrupt = Dict(4=>delay_affect!) 
-delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
+delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
 
 - `delay_trigger`  
@@ -56,23 +69,12 @@ delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 
 Now we can initialise the problem by setting 
 
-```julia
-u0 = [0, 0]
-tf = 30.
-saveat = .1
-de_chan0 = [[]]
-p = 0.
-tspan = (0.,tf)
-```
+
 where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose `k`th entry stores the schduled delay time for `k`th delay channel. Here we assume $X_I(0) = 0$, thus only an empty array.
 Next, we choose a delay SSA algorithm `DelayDirect()` and define the problem
 
 ```julia
-aggregatoralgo = DelayDirect()
-save_positions = (false,false)
-dprob = DiscreteProblem(u0, tspan, p)
-jprob = JumpProblem(dprob, aggregatoralgo, jumpset, save_positions = (false,false))
-djprob = DelayJumpProblem(jprob,delaysets,de_chan0)
+djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
 ```
 where `DelayJumpProblem` inputs `JumpProblem`, `DelayJumpSet` and the initial condition of the delay channel `de_chan0`.
 

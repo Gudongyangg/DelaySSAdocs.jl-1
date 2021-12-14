@@ -1,11 +1,12 @@
 # [A bursty model with delay](@id bursty_model)
 
-## Model definition
+## Model
 We study the following model which does not have an explicit gene state description
 and that the product (RNA or protein denoted as P) is actively transcribed in bursts whose size are distributed according to a geometric distribution. This means the propensity functions is is given by $f(n) = ab^n/(1+b)^{n+1}$ for any positive integer $n$. Our bursty model writes: 
 ```math
 \frac{ab^n}{(1+b)^{n+1}}: \emptyset \rightarrow nP \text{ triggers }nP\Rightarrow\emptyset \text{ after $\tau$ time}
 ```
+## Markovian part
 The system has an explict solution which is obtained in [1, Supplementary Note Section 2]. We first construct reaction network
 ```julia
 @parameters a b t
@@ -26,10 +27,11 @@ tspan = (0,tf)
 timestamp = 0:1:tf
 ps = [0.0282, 3.46]
 τ = 130.
+dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 ```
 where `de_chan0` is the initial condition for the delay channel where we assume no ongoing delay reactions at $t=0$. Next, we define delay trigger funtion `append!(de_chan[1], fill(τ, i))` for $i\in 1,\ldots,30$.
 
-## Defining a `DelayJumpSet`
+## Non-Markovian part
 ```julia
 delay_trigger_affect! = []
 for n in 1:burst_sup
@@ -54,10 +56,9 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
   
 We define the delay SSA problem
 ```julia
-dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
-where `DelayJumpProblem` inputs `DelayJumpProblem`, `DelayJumpSet` and the initial condition of the delay channel `de_chan0`.
+where `DelayJumpProblem` inputs `JumpSystem`, `DelayJumpProblem`, `DelayJumpSet`, the algorithm we choose and the initial condition of the delay channel `de_chan0`.
 ## Visualisation
 ```julia
 using DiffEqJump

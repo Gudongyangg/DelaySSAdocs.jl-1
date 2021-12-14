@@ -1,9 +1,9 @@
 # A multi-next-delay example
 
-## Model definition
+## Model
 
 The model is defined as follows: 1. $C:\emptyset \rightarrow X_A$; 2. $\gamma : X_A \rightarrow \emptyset $ ; 3. $\beta : X_A \rightarrow  X_{I1}+X_{I2}$, which triggers $X_{I1},X_{I2}\Rightarrow \emptyset$ after $\tau$ time; 4. $\gamma : X_{I1} \rightarrow \emptyset$; 5. $\gamma : X_{I2} \rightarrow \emptyset$. The 4th and 5th reactions will cause the delay channel to change its state during a schduled delay reaction. Note this example is to test multiple delay reactions. The exact solution can be found in [this example](@ref delay_degradation).
-
+## Markovian part
 We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details).
 
 ```julia
@@ -12,11 +12,23 @@ rate1 = [C,γ,β,γ,γ]
 reactant_stoch = [[],[1=>1],[1=>1],[2=>1],[3=>1]]
 net_stoch = [[1=>1],[1=>-1],[1=>-1,2=>1,3=>1],[2=>-1],[3=>-1]]
 mass_jump = MassActionJump(rate1, reactant_stoch, net_stoch; scale_rates =false)
-jumpsets = JumpSet((),(),nothing,[mass_jump])
+jumpset = JumpSet((),(),nothing,[mass_jump])
 ```
 We can see the definition of the parameters in [this example](@ref Model_definition).
 
-### Defining a `DelayJumpSet`
+Then we initialise the problem by setting
+```julia
+u0 = [0, 0, 0]
+tf = 30.
+saveat = .1
+de_chan0 = [[]]
+tspan = (0.,tf)
+```
+So we can define the DiscreteProblem
+```julia
+dprob = DiscreteProblem(u0, tspan)
+```
+## Non-Markovian part
 
 Then we turn to the definition of delay reactions
 
@@ -37,7 +49,7 @@ delay_affect2! = function (de_chan, rng)
     deleteat!(de_chan[2],i)
 end
 delay_interrupt = Dict(4=>delay_affect1!,5=>delay_affect2!) 
-delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
+delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
 
 - `delay_trigger`  
@@ -50,23 +62,11 @@ delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
   - Keys: Indices of delay channel. Here the 1st delay channel corresponds to $X_{I1}$ and the 2 nd delay channel corresponds to $X_{I2}$ .
   - Values: A vector of `Pair`s, mapping species id to net change of stoichiometric coefficient.
 
-Now we can initialise the problem by setting
-```julia
-u0 = [0,0,0]
-tf = 30.
-saveat = .1
-de_chan0 = [[],[]]
-p = 0.
-tspan = (0.,tf)
-```
+
 where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose `k`th entry stores the schduled delay time for `k`th delay channel. Here we assume $X_{I1}(0),X_{I2}(0)=0$, thus only two empty arrays. Next, we choose a delay SSA algorithm `DelayDirect()` and define the problem
 
 ```julia
-aggregatoralgo = DelayDirect()
-save_positions = (false,false)
-dprob = DiscreteProblem(u0, tspan, p)
-jprob = JumpProblem(dprob, aggregatoralgo, jumpsets, save_positions = (false,false))
-djprob = DelayJumpProblem(jprob,delaysets,de_chan0)
+djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
 ```
 where `DelayJumpProblem` inputs `JumpProblem`, `DelayJumpSet` and the initial condition of the delay channel `de_chan0`.
 
