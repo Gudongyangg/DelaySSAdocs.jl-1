@@ -24,6 +24,7 @@ mass_jump = MassActionJump(rate1, reactant_stoich, net_stoich; scale_rates =fals
 jumpset = JumpSet((),(),nothing,[mass_jump])
 ```
 We refer to [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/#Markovian-part) for more details about the constuction of a `Jumpset`.
+
 ### Defining a `DelayJumpSet`
 
 Then we turn to the definition of delay reactions
