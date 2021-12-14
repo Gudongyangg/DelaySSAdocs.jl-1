@@ -8,7 +8,6 @@ I\stackrel{r}{\rightarrow}R
 and $S+I\xrightarrow{\rho} E+I$ will trigger $E\Rightarrow I$ after $\tau$ time, where $S$, $I$ and $R$ are the susceptible, infected and removed populations. $E$ represents the exposed population. It means, wtih rate $\rho$, a susceptible contacted by an infected will become an individual that is exposed to the disease and then it takes certain amount of time delay $\tau$ to become an infected inidividual.
 
 # Model
-
 What differs from the Markov process that can be modelled via SSA is the introduction of **delay reactions**. To show how we incorporate the delay reactions into the Markovian system, we first need to define the Markovian part and then its non-Markovian part. These two parts mainly form a `DelayJumpProblem`. Here we show two routes to define our delay system, one way is based on `JumpSystem`, `DiscreteProblem` and `DelayJumpSet`, the other is based on `JumpSet`, `DiscreteProblem` and `DelayJumpSet`.
 
 ## First route: `JumpSystem + DiscreteProblem + DelayJumpSet`
