@@ -81,6 +81,7 @@ where `DelayJumpProblem` inputs `jumpsys`,`DiscreteProblem`, `DelayJumpSet`, the
 Let's put aside our `DelayJumpProblem` for the moment and see how to define the delay system in another way. 
 
 ## Second route: `JumpSet + DiscreteProblem + DelayJumpSet`
+
 Now we explain how to define the `DelayJumpProblem` in another way. To that aim, we should first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details) and construct a `Jumpset`.
 ### Markovian part
 ```julia 
