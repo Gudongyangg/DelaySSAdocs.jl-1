@@ -6,7 +6,7 @@ We study the following model with delayed production
 A_n: \emptyset \rightarrow X \text{ triggers } X \Rightarrow Y \text{ after $\tau$ time}\\
 B_n: Y \rightarrow \emptyset
 ```
-This model is studied in ....
+This model is studied in [1].
 
 ### Markovian part
 ```julia
@@ -83,3 +83,5 @@ Here we plot the histogram of the number of unfinished reactant $X$s in the dela
 
 ![heterogeneous2](../assets/heterogeneous_delay2.svg)
 
+## Reference
+[1] 

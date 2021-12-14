@@ -76,12 +76,12 @@ At last, we can define the `DelayJumpProblem` by
 ```julia
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true))
 ```
-where `DelayJumpProblem` inputs `jumpsys`,`DiscreteProblem`, `DelayJumpSet`, the algorithm we choose and the initial condition of the delay channel `de_chan0`.
+where `DelayJumpProblem` inputs `jumpsys`,`DiscreteProblem`, `DelayJumpSet`, the algorithm we choose and the initial condition of the delay channel `de_chan0`. The optional augment `save_positions` is a Boolean tuple for whether to save before and after the event.
 
 Let's put aside our `DelayJumpProblem` for the moment and see how to define the delay system in another way. 
 
 ## Second route: `JumpSet + DiscreteProblem + DelayJumpSet`
-Now we explain how to define the `DelayJumpProblem` in another way. To that aim, we should first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details) and construct `Jumpset`.
+Now we explain how to define the `DelayJumpProblem` in another way. To that aim, we should first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details) and construct a `Jumpset`.
 ### Markovian part
 ```julia 
 ρ, r = [1e-4, 1e-2]
@@ -91,8 +91,16 @@ net_stoich = [[1=>-1,3=>1],[2=>-1,4=>1]]
 mass_jump = MassActionJump(rate1, reactant_stoich, net_stoich; scale_rates =false)
 jumpset = JumpSet((),(),nothing,mass_jump)
 ```
-The `JumpSet` consists of four inputs, namely variable jumps, constant rate jumps, regular jumps and mass-action jumps. As far as discrete stochastic simulation is concerned, we only focus on constant rate jumps and mass-action jumps which is the second and fourth inputs of `JumpSet` (see [different jump types](https://diffeq.sciml.ai/stable/types/jump_types/) for more details). Here we only have two mass-action jumps that are wrapped in `mass_jump`.
+We briefly explain the augments:
+- `rates` is a vector of rates of reactions.
+- `reactant_stoich` is a vector whose `k`th entry is the reactant stoichiometry of the `k`th reaction. The reactant stoichiometry for an individual reaction is assumed to be represented as a vector of `Pair`s, mapping species id to stoichiometric coefficient.
+- `net_stoich`  is assumed to have the same type as `reactant_stoich`; a vector whose `k`th entry is the net stoichiometry of the `k`th reaction. The net stoichiometry for an individual reaction is again represented as a vector of `Pair`s, mapping species id to the net change in the species when the reaction occurs.
+- `scale_rates` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie, and hence need to be rescaled. *The default, `scale_rates=true`, corresponds to rescaling the passed in rate constants.* When using `MassActionJump` the default behavior is to assume rate constants correspond to stochastic rate constants in the sense used by Gillespie (J. Comp. Phys., 1976, 22 (4)). This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function constructed by `MassActionJump` would be `k*A*(A-1)/2!`. For a trimolecular reaction like $3A \overset{k}{\rightarrow} B$ the rate function would be `k*A*(A-1)*(A-2)/3!`. To *avoid* having the reaction rates rescaled (by `1/2` and `1/6` for these two examples), one can pass the `MassActionJump` constructor the optional named parameter `scale_rates=false`
+- `mass_jump`  Define mass-action jumps
+- `jumpsets`  Wrap up the reactions into one jumpset.
 
+The `JumpSet` consists of four inputs, namely variable jumps, constant rate jumps, regular jumps and mass-action jumps. As far as discrete stochastic simulation is concerned, we only focus on constant rate jumps and mass-action jumps which is the second and fourth inputs of `JumpSet` (see [different jump types](https://diffeq.sciml.ai/stable/types/jump_types/)
+Here we only have two mass-action jumps that are wrapped in `mass_jump`.
 Then we initialise the problem by setting
 ```julia
 u0 = [999,1,0,0]

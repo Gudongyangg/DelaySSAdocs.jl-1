@@ -105,7 +105,7 @@ ens = solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = Sample_size, 
 ```
 ![oscillator3](../assets/oscillator3.svg)
 
-If we want to see how $Y$ varies accoring to the number of $X$, we will find the following oscillary orbit in the phase diagram.
+If we want to see how the mean of $Y$ varies according to the mean of $X$, we will find the following oscillary orbit in the phase diagram.
 
 ![oscillator4](../assets/oscillator4.gif)
 

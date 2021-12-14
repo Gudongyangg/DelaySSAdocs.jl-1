@@ -23,14 +23,7 @@ net_stoich = [[1=>1],[1=>-1],[1=>-1,2=>1],[2=>-1]]
 mass_jump = MassActionJump(rate1, reactant_stoich, net_stoich; scale_rates =false)
 jumpset = JumpSet((),(),nothing,[mass_jump])
 ```
-
-- `rates`  A vector of rates of reactions.
-- `reactant_stoch` is a vector whose `k`th entry is the reactant stoichiometry of the `k`th reaction. The reactant stoichiometry for an individual reaction is assumed to be represented as a vector of `Pair`s, mapping species id to stoichiometric coefficient.
-- `net_stoch`  is assumed to have the same type as `reactant_stoich`; a vector whose `k`th entry is the net stoichiometry of the `k`th reaction. The net stoichiometry for an individual reaction is again represented as a vector of `Pair`s, mapping species id to the net change in the species when the reaction occurs.
-- `scale_rates` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie, and hence need to be rescaled. *The default, `scale_rates=true`, corresponds to rescaling the passed in rate constants.* When using `MassActionJump` the default behavior is to assume rate constants correspond to stochastic rate constants in the sense used by Gillespie (J. Comp. Phys., 1976, 22 (4)). This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function constructed by `MassActionJump` would be `k*A*(A-1)/2!`. For a trimolecular reaction like $3A \overset{k}{\rightarrow} B$ the rate function would be `k*A*(A-1)*(A-2)/3!`. To *avoid* having the reaction rates rescaled (by `1/2` and `1/6` for these two examples), one can pass the `MassActionJump` constructor the optional named parameter `scale_rates=false`
-- `mass_jump`  Define mass-action jumps
-- `jumpsets`  Wrap up the reactions into one jumpset.
-
+We refer to [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/#Markovian-part) for more details about the constuction of a `Jumpset`.
 ### Defining a `DelayJumpSet`
 
 Then we turn to the definition of delay reactions
