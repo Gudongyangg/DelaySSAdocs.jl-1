@@ -140,7 +140,7 @@ The rejection algorithm essentially generates $\Delta$ in the event ([2](#mjx-eq
 is a non-negative integer, then we have $\Delta \in [T_i,T_{i+1})$ and *i* delayed reactions finished in the time interval $[t,t+\Delta)$. 
 
 From the iterative procedure of generating $\Delta$ described
-above, we can find $P_0(\Delta)$ that the rejection method algorithm produces. Specifically, if $\Delta \in [T_i,T_{i+1})$, we have $P(E_0)=P(\Delta_1 > T_1)$, $P(E_k丨E_0,\ldots,E_{k-1}) = P(\Delta_{k+1} > T_{k+1} - T_k), k=1,\ldots,i−1$, because $\Delta_k,k=1,\ldots,i$, are rejected. Since $\Delta_{k+1}$ is accepted, at least one reaction will occur in the time interval $[t+T_i,t+\Delta)$, if $\Delta_{i+1} < \Delta −T_i$. Thus, $P(E_i丨E_0,\ldots,E_{i-1}) = 1−P(\Delta_{i+1} < \Delta - T_i) = P(\Delta_{i+1} > \Delta - T_i)$. Therefore, for the rejection method, $P_0(\Delta)$ in Eq. ([6](#mjx-eqn-6)) can be written as
+above, we can find $P_0(\Delta)$ that the rejection method algorithm produces. Specifically, if $\Delta \in [T_i,T_{i+1})$, we have $P(E_0)=P(\Delta_1 > T_1)$, $P(E_k丨E_0,\ldots,E_{k-1}) = P(\Delta_{k+1} > T_{k+1} - T_k), k=1,\ldots,i−1$, because $\Delta_k,k=1,\ldots,i$, are rejected. Since $\Delta_{i+1}$ is accepted, at least one reaction will occur in the time interval $[t+T_i,t+\Delta)$, if $\Delta_{i+1} < \Delta −T_i$. Thus, $P(E_i丨E_0,\ldots,E_{i-1}) = 1−P(\Delta_{i+1} < \Delta - T_i) = P(\Delta_{i+1} > \Delta - T_i)$. Therefore, for the rejection method, $P_0(\Delta)$ in Eq. ([6](#mjx-eqn-6)) can be written as
 ```math
 \begin{equation}
 P_0(\Delta) = P(\Delta_{i+1} > \Delta - T_i) \prod_{k=1}^i P(\Delta_k > T_k - T_{k-1}).
