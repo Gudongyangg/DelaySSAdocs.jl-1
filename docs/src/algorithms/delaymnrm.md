@@ -2,7 +2,7 @@
 
 No matter whether a reaction is contained in $\text{ND}$, $\text{CD}$, or $\text{ICD}$, the number of initiations at absolute time $t$ will be given by
 ```math
-\text{number of initiations of reaction } k \text{ by time } t = Y_k\Big(\int_{0}^{t} a_k(X(s)\Big)\, \mathrm{d}s)
+\text{number of initiations of reaction } k \text{ by time } t = Y_k\Big(\int_{0}^{t} a_k(X(s)\, \mathrm{d}s\Big)
 ```
 where the $Y_k$ are independent, unit rate Poisson processes.
 
