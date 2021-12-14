@@ -62,7 +62,7 @@ P(\Delta,\mu)\text{d}\Delta=P_0(\Delta) a_\mu(t +\Delta)\text{d}\Delta,
 \end{equation}
 ```
 
-where $P_0(\Delta)$ is the probability that no reaction will occur in the time interval $[t,t+\Delta]$, while $a_\mu(t+\Delta)\text{d}\Delta$ is the probability that a reaction $R_\mu$ occurs in $[t+\Delta,t+\Delta+\text{d}\Delta]$. Defining $T_0=0$ and $T_{d+1}=\infty$, we can find $P_0(\Delta)$ for $\Delta$ that lies in different time intervals $[T_i,T_{i+1}),i=0,\ldots,d$. If $\Delta \in [T_i,T_i+1)$, we define the event $E_k$ as the event that no reaction occurs in the time interval $[t+T_k,t+T_{k+1}),k=0,\ldots,k=i−1$, respectively,and the event  $E_i$  as the event that no reaction occurs in the time interval $[t+T_i,t+\Delta)$. Then, we can express $P_0(\Delta)$ as
+where $P_0(\Delta)$ is the probability that no reaction will occur in the time interval $[t,t+\Delta]$, while $a_\mu(t+\Delta)\text{d}\Delta$ is the probability that a reaction $R_\mu$ occurs in $[t+\Delta,t+\Delta+\text{d}\Delta]$. Defining $T_0=0$ and $T_{d+1}=\infty$, we can find $P_0(\Delta)$ for $\Delta$ that lies in different time intervals $[T_i,T_{i+1}),i=0,\ldots,d$. If $\Delta \in [T_i,T_i+1)$, we define the event $E_k$ as the event that no reaction occurs in the time interval $[t+T_k,t+T_{k+1}),k=0,\ldots,k=i−1$, respectively, and the event  $E_i$  as the event that no reaction occurs in the time interval $[t+T_i,t+\Delta)$. Then, we can express $P_0(\Delta)$ as
 
 ```math
 \begin{equation}
@@ -104,9 +104,13 @@ and
 f_\mu(\mu)={ {a_\mu(t+T_i)} \over {a_0(t+T_i)} },\ \ \  \mu = 1,\ldots,M,\ \ \  \Delta \in [T_i,T_{i+1}),
 ```
 
-It is not difficult to verify that $\int_{0}^{\infty} f_\Delta(\Delta)\, \text{d}\Delta = 1$. In simulation, $\mu$ can be generated, from a standard uniform random variable $u_1$, by taking $\mu$ to be the integer for which $\begin{matrix} \sum_{k=1}^{\mu-1} a_k(t+T_i) \end{matrix} < u_1 a_0(t+T_i) ≤ \begin{matrix} \sum_{k=1}^\mu a_k(t+T_i) \end{matrix}$, after $\Delta$ is generated to be in the time interval $[T_i,T_{i+1})$.We next derive the method of generating  $\Delta$ according to its PDF in Eq. ([8](#mjx-eqn-8)).
+It is not difficult to verify that $\int_{0}^{\infty} f_\Delta(\Delta)\, \text{d}\Delta = 1$. In simulation, $\mu$ can be generated, from a standard uniform random variable $u_1$, by taking $\mu$ to be the integer for which 
+```math
+\sum_{k=1}^{\mu-1} a_k(t+T_i)  < u_1 a_0(t+T_i) ≤  \sum_{k=1}^\mu a_k(t+T_i),
+```
+after $\Delta$ is generated to be in the time interval $[T_i,T_{i+1})$. We next derive the method of generating  $\Delta$ according to its PDF in Eq. ([8](#mjx-eqn-8)).
 
-The cumulative distribution function of $\Delta$can be found from Eq. ([8](#mjx-eqn-8)) as
+The cumulative distribution function of $\Delta$ can be found from Eq. ([8](#mjx-eqn-8)) as
 
 ```math
 \begin{aligned}
@@ -126,7 +130,7 @@ Find $T_i$ such that  $F_\Delta(T_i) ≤ u_2 ≤ F_\Delta(T_{i+1})$, then calcul
 \end{aligned}
 ```
 
-Since we need $T_1,\ldots,T_d$ to generate $\Delta$ and $\mu$, we define an array of data structures, named *Tstruct*, whose $i$th $(i=1,\ldots,d)$ cell stores $T_i$ and the index, $\mu_i$, of the reaction that $T_i$ is associated with. The reaction index $\mu_i$ is needed during the generation of $\Delta$, when we update the propensity functions affected by the reaction that is delayed but finishes at $t+T_i$. During simulation, we need to generate $\Delta$ and $\mu$, maintain *Tstruct*, and then update the state vector $X(t)$.
+Since we need $T_1,\ldots,T_d$ to generate $\Delta$ and $\mu$, we define an array of data structures, named *Tstruct*, whose $i$th $(i=1,\ldots,d)$ cell stores $T_i$ and the index, $\mu_i$, of the reaction that $T_i$ is associated with. The reaction index $\mu_i$ is needed during the generation of $\Delta$, when we update the propensity functions affected by the reaction that is delayed but finishes at $t+T_i$. During simulation, we need to generate $\Delta$ and $\mu$, maintain *Tstruct*, and then update the state vector $X(t)$. We refer to [delay direct algorithm](algorithms/delaydirect.md) for details.
 
 
 ### Delay rejection method
