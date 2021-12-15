@@ -105,7 +105,64 @@ mean_x_A(t) = C/a*(1-exp(-a*t))
 mean_x_I(t)= 0<=t<=τ ? C*β/(a-γ)*((1-exp(-γ*t))/γ - (1-exp(-a*t))/a) : C*β/a*((1-exp(-γ*τ))/γ + exp(-a*t)*(1-exp((a-γ)τ))/(a-γ))
 ```
 ![degradation2](../assets/delay_degradation2.svg)
-![degradation3](../assets/delay_degradation3.svg)
+
+
+# A multi-next-delay example
+
+Then we can extend the model to multi-next-delay.
+
+The model is defined as follows: 1. $C:\emptyset \rightarrow X_A$; 2. $\gamma : X_A \rightarrow \emptyset $ ; 3. $\beta : X_A \rightarrow  X_{I1}+X_{I2}$, which triggers $X_{I1},X_{I2}\rightarrow \emptyset $ after $\tau$ time; 4. $\gamma : X_{I1} \rightarrow \emptyset $; 5. $\gamma : X_{I2} \rightarrow \emptyset $. The 4th and 5th reactions will cause the delay channel to change its state during a schduled delay reaction.
+
+Similarly, we define the problem as follows:
+### Markovian part
+```julia
+C, γ, β, τ = [2., 0.1, 0.5, 15.]
+rate1 = [C,γ,β,γ,γ]
+reactant_stoch = [[],[1=>1],[1=>1],[2=>1],[3=>1]]
+net_stoch = [[1=>1],[1=>-1],[1=>-1,2=>1,3=>1],[2=>-1],[3=>-1]]
+mass_jump = MassActionJump(rate1, reactant_stoch, net_stoch; scale_rates =false)
+jumpset = JumpSet((),(),nothing,[mass_jump])
+```
+
+```julia
+u0 = [0, 0, 0]
+tf = 30.
+saveat = .1
+de_chan0 = [[]]
+tspan = (0.,tf)
+dprob = DiscreteProblem(u0, tspan)
+```
+### Non-Markovian part
+```julia
+delay_trigger_affect! = function (de_chan, rng)
+   append!(de_chan[1], τ)
+   append!(de_chan[2], τ)
+end
+delay_trigger = Dict(3=>delay_trigger_affect!)
+delay_complete = Dict(1=>[2=>-1],2=>[3=>-1]) 
+
+delay_affect1! = function (de_chan, rng)
+    i = rand(rng, 1:length(de_chan[1]))
+    deleteat!(de_chan[1],i)
+end
+delay_affect2! = function (de_chan, rng)
+    i = rand(rng, 1:length(de_chan[2]))
+    deleteat!(de_chan[2],i)
+end
+delay_interrupt = Dict(4=>delay_affect1!,5=>delay_affect2!) 
+delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
+```
+
+```julia
+djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
+```
+### Visualisation
+```julia
+sol =@time solve(djprob, SSAStepper(),seed=10, saveat =.1, save_delay_channel = false)
+ens_prob = EnsembleProblem(djprob)
+ens =@time solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = 10^4, saveat = .1, save_delay_channel =false)
+```
+![degradation3](../assets/delay_multidegradation3.svg)
 
 
 
