@@ -69,7 +69,7 @@ We refer to [Defining a `DelayJumpSet`](bursty.md/#Defining-a-DelayJumpSet) and 
 
 ### [Remark on Reaction Indices](@id indice_notice) 
 !!! warning
-    `JumpSystem` might change the order of the reactions that is arranged in your reaction network. Internally, all MassActionJumps are ordered before ConstantRateJumps (with the latter internally ordered in the same order they were passed in). The same principle applies for the construction of `JumpSet`.
+    `JumpSystem` might change the order of the reactions that is arranged in your reaction network. Internally, all MassActionJumps are ordered before ConstantRateJumps (with the latter internally ordered in the same order they were passed in). The same principle applies for the construction of `JumpSet`.  
 
 At last, we can define the `DelayJumpProblem` by 
 ```julia
