@@ -97,7 +97,7 @@ ens =@time solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = Sample_s
 ![degradation1](../assets/delay_degradation1.svg)
 
 ### Verification with the exact solution
-Lastkt, we can compare with the mean values of the exact solutions $X_I, X_A$
+We compare with the mean values of the exact solutions $X_I, X_A$
 ```julia
 timestamps = 0:0.1:tf
 a = β + γ 
@@ -107,9 +107,9 @@ mean_x_I(t)= 0<=t<=τ ? C*β/(a-γ)*((1-exp(-γ*t))/γ - (1-exp(-a*t))/a) : C*β
 ![degradation2](../assets/delay_degradation2.svg)
 
 
-# A multi-next-delay example
+# A multiple delay reactions example
 
-Then we can extend the model to multi-next-delay.
+Then we can extend the model to multiple delay reactions, i.e. mutiple delay channels having simultaneous delay reactions.
 
 The model is defined as follows: 1. $C:\emptyset \rightarrow X_A$; 2. $\gamma : X_A \rightarrow \emptyset $ ; 3. $\beta : X_A \rightarrow  X_{I1}+X_{I2}$, which triggers $X_{I1},X_{I2}\rightarrow \emptyset $ after $\tau$ time; 4. $\gamma : X_{I1} \rightarrow \emptyset $; 5. $\gamma : X_{I2} \rightarrow \emptyset $. The 4th and 5th reactions will cause the delay channel to change its state during a schduled delay reaction.
 
