@@ -2,7 +2,7 @@
 
 ## Model
 We study the following model which does not have an explicit gene state description
-and that the product (RNA or protein denoted as P) is actively transcribed in bursts whose size are distributed according to a geometric distribution. This means the propensity functions is is given by $f(n) = ab^n/(1+b)^{n+1}$ for any positive integer $n$. Our bursty model writes: 
+and that the product (RNA or protein denoted as P) is actively transcribed in bursts whose size are distributed according to a geometric distribution. This means the propensity functions is is given by $f(n) = ab^n/(1+b)^{n+1}$ for any positive integer $n$. The bursty model writes: 
 ```math
 \frac{ab^n}{(1+b)^{n+1}}: \emptyset \rightarrow nP \text{ triggers }nP\Rightarrow\emptyset \text{ after $\tau$ time}
 ```
@@ -35,8 +35,8 @@ where `de_chan0` is the initial condition for the delay channel where we assume 
 ```julia
 delay_trigger_affect! = []
 for n in 1:burst_sup
-    push!(delay_trigger_affect!, function (de_chan, rng)
-    append!(de_chan[1], fill(τ, n))
+    push!(delay_trigger_affect!, function (integrator, rng)
+    append!(integrator.de_chan[1], fill(τ, n))
     end)
 end
 delay_trigger_affect!

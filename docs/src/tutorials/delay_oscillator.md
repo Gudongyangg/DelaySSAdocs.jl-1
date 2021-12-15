@@ -63,8 +63,8 @@ dprob = DiscreteProblem(u0, tspan)
 The same as we did before, we must define the `DelayJumpSet`
 
 ```julia
-delay_trigger_affect! = function (de_chan, rng)
-    append!(de_chan[1], τ)
+delay_trigger_affect! = function (integrator, rng)
+    append!(integrator.de_chan[1], τ)
 end
 delay_trigger = Dict(1=>delay_trigger_affect!)
 delay_complete = Dict(1=>[2=>1, 1=>-1])

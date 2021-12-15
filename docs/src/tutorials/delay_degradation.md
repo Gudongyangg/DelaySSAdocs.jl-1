@@ -43,8 +43,8 @@ dprob = DiscreteProblem(u0, tspan)
 Then we turn to the definition of delay reactions
 
 ```julia
-delay_trigger_affect! = function (de_chan, rng)
-   append!(de_chan[1], τ)
+delay_trigger_affect! = function (integrator, rng)
+   append!(integrator.de_chan[1], τ)
 end
 delay_trigger = Dict(3=>delay_trigger_affect!)
 delay_complete = Dict(1=>[2=>-1]) 

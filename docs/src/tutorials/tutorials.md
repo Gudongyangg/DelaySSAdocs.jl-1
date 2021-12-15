@@ -12,7 +12,7 @@ What differs from the Markov process that can be modelled via SSA is the introdu
 
 ## First route: `JumpSystem + DiscreteProblem + DelayJumpSet`
 ### [Markovian part](@id Markovian_part)
-[Catalyst.jl](https://github.com/SciML/Catalyst.jl) provides a comprehensive interface to modelling reaction networks in Julia and can be used to construct models fully-compatible with DelaySSAToolkit. For more details on how to construct a reaction network, we recommend reading [Catalyst's tutorial](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/). In our example, the model can be defined as:
+[Catalyst.jl](https://github.com/SciML/Catalyst.jl) provides a comprehensive interface to modelling reaction networks in Julia and can be used to construct models fully-compatible with DelaySSAToolkit. For more details on how to construct a reaction network, we recommend reading [Catalyst's tutorial](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/). In our example, the Markovian part (**model without delays**) of the model can be defined as:
 ```julia
 rn = @reaction_network begin
     ρ, S+I --> E+I
@@ -57,7 +57,7 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 - `delay_trigger::Dict`  A dictionary that contains
   - Keys: Indices of reactions defined in `JumpSystem` that can trigger the delay reaction see [indices in the `JumpSystem`](@ref indice_notice). Here we have the first reaction $S+I\Rightarrow E+ I$ that will trigger the transfer from $E$ to $I$ after time $\tau$, hence the key here is `1`.
   
-  - Values: A update function that determines how to update the delay channel. In this example, once the delay reaction is trigged, the first delay channel will be added a delay time $\tau$.
+  - Values: An update function that determines how to update the delay channel. In this example, once the delay reaction is triggered, the first delay channel will be added a delay time $\tau$. The update function has two inputs: 1. `integrator`: which stores the current state of the reactants (`integrator.u`) and the delay channels (`integrator.de_chan`); 2. `rng`: the random seed for a given stochastic simulation.
   
 - `delay_interrupt::Dict`
   - There are no delay interrupt reactions in this example so we set `delay_interrupt = Dict()`.

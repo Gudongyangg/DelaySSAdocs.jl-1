@@ -6,9 +6,10 @@ We study the following model with delayed production
 A_n: \emptyset \rightarrow X \text{ triggers } X \Rightarrow Y \text{ after $\tau$ time}\\
 B_n: Y \rightarrow \emptyset
 ```
-This model is studied in [1].
+This model is studied in [1]. This delayed birth–death process can be used to model the dynamics of chemical species, such as proteins, that are produced through a sequence of reactions. We first consider fixed birth delays, $\tau_n$, which are constant across reactions within a cell, but may vary between cells. In the generative model above, the authors assume that, across the population, production rates, $A_n$, degradation rates, $B_n$, and the fixed birth delays, $\tau_n$, follow a gamma distribution. Decrease in protein count is due to growth-induced dilution or enzymatic degradation, and is described by an instantaneous death process with rate $B_n$.
 
 ### Markovian part
+To define the Markovian part of the model, we set the model by
 ```julia
 using Catalyst, DiffEqJump
 using Distributions, Random
@@ -17,13 +18,13 @@ rn = @reaction_network begin
     A, 0 --> X
     B, Y --> 0
 end A B
-u0 = [0,0]
+u0 = [0,0] # X, Y
 de_chan0 = [[]]
 tf = 100.
 tspan = (0,tf)
-ps = [10., 1.] # A, B. The initial conditions dummy variables, later on will be drawn from a Gamma distribution 
+ps = [10., 1.] # A, B. The initial conditions are dummy variables, later on will be drawn from Gamma distributions 
 ```
-
+where $X$ is an extra species that represents the premature product in the delay channel that will turn into $Y$ after a delay time $\tau_n$ for each cell $n$. 
 ### Non-Markovian part
 
 ```julia
@@ -37,6 +38,7 @@ dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
+Here the value of `delay_trigger` is `[1=>τ]`. This is of `Pair` type where the first index means the number of delay channel, the second index is the delay time. Such a definition is equivalent to an update function `function(integrator, rng) push!(integrator.de_chan[1],τ) end`.
 
 ## Heterogeneous fixed delays
 ### Define `EnsembleProblem` 
@@ -52,12 +54,14 @@ end
 ensprob1 = EnsembleProblem(jprob, prob_func = prob_func)
 @time ens1 = solve(ensprob1, SSAStepper(), EnsembleThreads(), trajectories = 40, saveat = 1.)
 ```
+For each simulation $i$ (represents an individual cell), a set of parameters $A, B, τ$ will be drawn from Gamma distributions, where the parameters are defined as in [1]. One only needs to reconstruct the `DelayJumpProblem` by invoking the function `remake` for each different simulation.
 
 ## Visualisation
+We plot the time evolution of 40 simulations.
 ![heterogeneous1](../assets/heterogeneous_delay1.svg)
 
 ## Distributed delays
-In [1, Section 3.2], the authors considerd the case with distributed delay, one can change the problem setting only by few lines of code.
+In [1, Section 3.2], the authors considerd the case with distributed delay, where the delay can vary between reactions within and between cells. One can adopt the problem setting only by few lines of code.
 ### Define `EnsembleProblem` 
 ```julia
 function prob_func(prob, i ,repeat)
@@ -72,16 +76,16 @@ end
 ensprob2 = EnsembleProblem(jprob, prob_func = prob_func)
 ```
 ## Visualisation
-Note that a simulation of $10^4$ samples only takes few minutes on a laptop:
+Note that a simulation of $10^4$ samples with very high production number only takes few minutes on a laptop:
 ```julia-repl
 julia> @time ens2 = solve(ensprob2, SSAStepper(), EnsembleThreads(), trajectories = 10^4)
 
  78.925908 seconds (249.65 M allocations: 28.632 GiB, 6.60% gc time)
 EnsembleSolution Solution of length 10000 with uType
 ```
-Here we plot the histogram of the number of unfinished reactant $X$s in the delay channel
+Here we plot the histogram of the number of unfinished reactant $X$s in the delay channel.
 
 ![heterogeneous2](../assets/heterogeneous_delay2.svg)
 
 ## Reference
-[1] 
+[1] Mark Jayson Cortez, Hyukpyo Hong, Boseung Choi, Jae Kyoung Kim, Krešimir Josić, "Hierarchical Bayesian models of transcriptional and translational regulation processes with delays", Bioinformatics, 2021;, btab618, [https://doi.org/10.1093/bioinformatics/btab618](https://doi.org/10.1093/bioinformatics/btab618)
