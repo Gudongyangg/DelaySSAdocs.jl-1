@@ -15,6 +15,8 @@ We set $\sigma_{\text{on}}=0.0282$, $\sigma_{\text{off}}=0.609$ and $\rho=2.11$.
 We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details).
 
 ```julia
+using DiffEqJump, DelaySSAToolkit
+using Random, Distributions
 rate1 = [0.0282, 0.609, 2.11]
 reactant_stoich = [[2=>1],[1=>1],[1=>1]]
 net_stoich = [[1=>1,2=>-1],[1=>-1,2=>1],[3=>1]]
@@ -36,7 +38,7 @@ Unlike other examples, the elongation time $\tau$ is a random variable sampled f
 
 ```julia
 delay_trigger_affect! = function (integrator, rng)
-    τ=rand(LogNormal(1,sqrt(2)),1)+120
+    τ=rand(LogNormal(1,sqrt(2)))+120
     append!(integrator.de_chan[1], τ)
 end
 delay_trigger = Dict(3=>delay_trigger_affect!)
@@ -53,11 +55,13 @@ djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_cha
 
 Then we simulate $10^5$ trajectories and calculate the probability distribution.
 ```julia
-using DiffEqJump
 ensprob = EnsembleProblem(djprob)
 @time ens = solve(ensprob, SSAStepper(), EnsembleThreads(), trajectories=10^5)
 ```
+![stochastic_delay1](../assets/stochastic_delay1.svg)
 
+If we change the stochastic delay to $\tau\sim \text{LogNormal}(0,2)+120$, we have the destruction of the zero mode.
+![stochastic_delay2](../assets/stochastic_delay2.svg)
 ## Reference
 
 [1] Qingchao Jiang, Xiaoming Fu, Shifu Yan, Runlai Li, Wenli Du, Zhixing Cao, Feng Qian, Ramon Grima, "Neural network aided approximation and parameter inference of non-Markovian models of gene expression". Nature communications, (2021) 12(1), 1-12. https://doi.org/10.1038/s41467-021-22919-1
