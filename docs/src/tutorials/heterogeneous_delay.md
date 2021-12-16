@@ -38,7 +38,7 @@ dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
-Here the value of `delay_trigger` is `[1=>τ]`. This is of `Pair` type where the first index means the number of delay channel, the second index is the delay time. Such a definition is equivalent to an update function `function(integrator, rng) push!(integrator.de_chan[1],τ) end`.
+Here the value of `delay_trigger` is `[1=>τ]`. This is of `Pair` type where the first index means the number of delay channel, the second index represents the delay time. Such a definition is equivalent to pushing a delay time $\tau$ to the first delay channel provided that the reaction $A_n: 0\rightarrow X$ happened.
 
 ## Heterogeneous fixed delays
 ### Define `EnsembleProblem` 
