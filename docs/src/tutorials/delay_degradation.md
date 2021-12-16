@@ -23,7 +23,7 @@ net_stoich = [[1=>1],[1=>-1],[1=>-1,2=>1],[2=>-1]]
 mass_jump = MassActionJump(rate1, reactant_stoich, net_stoich; scale_rates =false)
 jumpset = JumpSet((),(),nothing,[mass_jump])
 ```
-We refer to [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/#Markovian-part) for more details about the constuction of a `Jumpset`.
+We refer to [this example](tutorials.md) for more details about the constuction of a `Jumpset`.
 
 Then we initialise the problem by setting
 ```julia
@@ -33,7 +33,7 @@ saveat = .1
 de_chan0 = [[]]
 tspan = (0.,tf)
 ```
-So we can define the `DiscreteProblem`
+where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose `k`th entry stores the schduled delay time for `k`th delay channel. Here we assume $X_I(0) = 0$, thus only an empty array. So we can define the `DiscreteProblem`
 ```julia
 dprob = DiscreteProblem(u0, tspan)
 ```
@@ -58,41 +58,32 @@ delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
 
 - `delay_trigger`  
-  - Keys: Indices of reactions defined in `jumpset` that can trigger the delay reaction. Here we have the 3rd reaction $\beta: X_A \rightarrow X_I$ that will trigger the $X_I$ to degrade after time $\tau$.
-  - Values: A update function that determines how to update the delay channel. In this example, once the delay reaction is trigged, the delay channel 1 (which is the channel for $X_I$) will be added a delay time $\tau$.			
+  - Keys: Indices of reactions defined in `jumpset` that can trigger the delay reaction. Here we have the 3rd reaction $\beta: X_A \rightarrow X_I$ that will trigger the degradation of $X_I$ after time $\tau$.
+  - Values: A update function that determines how to update the delay channel. In this example, once the delay reaction is triggered, the first delay channel (which is the channel for $X_I$) will be added to a delay time $\tau$.			
 - `delay_interrupt`
   - Keys: Indices of reactions defined in `jumpset` that can cause the change in delay channel. In this example, the 4th reaction $\gamma : X_I \rightarrow \emptyset$ will change the schduled delay reaction to change its state immediately.
-  - Values: A update function that determines how to update the delay channel. In this example, once a delay-interrupt reaction happens, any of the reactants $X_I$ that is supposed to leave the system after time $\tau$ can be degraded immediately.  
+  - Values: A update function that determines how to update the delay channel. In this example, once a `delay_interrupt` reaction happens, one (randomly picked) of the reactants $X_I$ that is supposed to leave the system after time $\tau$ is degraded immediately.  
 - `delay_complete` 
-  - Keys: Indices of delay channel. Here the 1st delay channel corresponds to $X_I$.
+  - Keys: Indices of delay channels. Here the first delay channel corresponds to $X_I$.
   - Values: A vector of `Pair`s, mapping species id to net change of stoichiometric coefficient.
 
-Now we can initialise the problem by setting 
-
-
-where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose `k`th entry stores the schduled delay time for `k`th delay channel. Here we assume $X_I(0) = 0$, thus only an empty array.
-Next, we choose a delay SSA algorithm `DelayDirect()` and define the problem
-
+Next, we choose a delay SSA algorithm and define the problem
 ```julia
 djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
 ```
 where `DelayJumpProblem` inputs `JumpProblem`, `DelayJumpSet` and the initial condition of the delay channel `de_chan0`.
 
 ## Visualisation
-
 Now we can solve the problem and plot a trajectory
-
 ```julia
 sol = solve(djprob, SSAStepper(), seed=2, saveat =.1, save_delay_channel = false)
 ```
 
-Then we simulate $10^4$ trajectories and calculate the evolution of mean value for each reactant
-
+Then we simulate $10^4$ trajectories and calculate the evolution of the mean value for each reactant
 ```julia
 using DiffEqBase
-Sample_size = Int(1e4)
 ens_prob = EnsembleProblem(djprob)
-ens =@time solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = Sample_size, saveat = .1, save_delay_channel =false)
+ens =@time solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = 1e4, saveat = .1, save_delay_channel =false)
 ```
 ![degradation1](../assets/delay_degradation1.svg)
 
@@ -109,12 +100,12 @@ mean_x_I(t)= 0<=t<=τ ? C*β/(a-γ)*((1-exp(-γ*t))/γ - (1-exp(-a*t))/a) : C*β
 
 # A multiple delay reactions example
 
-Then we can extend the model to multiple delay reactions, i.e. mutiple delay channels having simultaneous delay reactions.
+We can also extend the model to multiple delay reactions, i.e. mutiple delay channels having simultaneous delay reactions.
 
-The model is defined as follows: 1. $C:\emptyset \rightarrow X_A$; 2. $\gamma : X_A \rightarrow \emptyset $ ; 3. $\beta : X_A \rightarrow  X_{I1}+X_{I2}$, which triggers $X_{I1},X_{I2}\rightarrow \emptyset $ after $\tau$ time; 4. $\gamma : X_{I1} \rightarrow \emptyset $; 5. $\gamma : X_{I2} \rightarrow \emptyset $. The 4th and 5th reactions will cause the delay channel to change its state during a schduled delay reaction.
+The model is defined as follows: 1. $C:\emptyset \rightarrow X_A$; 2. $\gamma : X_A \rightarrow \emptyset$; 3. $\beta : X_A \rightarrow X_{I1}+X_{I2}$, which triggers $X_{I1},X_{I2}\rightarrow \emptyset$ after $\tau$ time; 4. $\gamma : X_{I1} \rightarrow \emptyset$; 5. $\gamma : X_{I2} \rightarrow \emptyset$. The 4th and 5th reactions will cause the delay channel to change its state during a schduled delay reaction.
 
 Similarly, we define the problem as follows:
-### Markovian part
+## Markovian part
 ```julia
 C, γ, β, τ = [2., 0.1, 0.5, 15.]
 rate1 = [C,γ,β,γ,γ]
@@ -132,7 +123,7 @@ de_chan0 = [[]]
 tspan = (0.,tf)
 dprob = DiscreteProblem(u0, tspan)
 ```
-### Non-Markovian part
+## Non-Markovian part
 ```julia
 delay_trigger_affect! = function (de_chan, rng)
    append!(de_chan[1], τ)
@@ -156,7 +147,7 @@ delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```julia
 djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
 ```
-### Visualisation
+## Visualisation
 ```julia
 sol =@time solve(djprob, SSAStepper(),seed=10, saveat =.1, save_delay_channel = false)
 ens_prob = EnsembleProblem(djprob)

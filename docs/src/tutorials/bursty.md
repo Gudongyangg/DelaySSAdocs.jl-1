@@ -29,9 +29,10 @@ ps = [0.0282, 3.46]
 τ = 130.
 dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 ```
-where `de_chan0` is the initial condition for the delay channel where we assume no ongoing delay reactions at $t=0$. Next, we define delay trigger funtion `append!(de_chan[1], fill(τ, i))` for $i\in 1,\ldots,30$.
+where `de_chan0` is the initial condition for the delay channel where we assume no ongoing delay reactions at $t=0$. 
 
 ## Non-Markovian part
+Next, we define delay trigger funtion: for *n*th-reaction, $\emptyset \rightarrow nP$, the delay channel will be added of a vector $[\tau,\ldots,\tau]$ of size $n$.
 ```julia
 delay_trigger_affect! = []
 for n in 1:burst_sup
@@ -54,11 +55,11 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
   - Keys: Indices of delay channel. Here we only have one delay channel for $P$.
   - Values: A vector of `Pair`s, mapping species id to net change of stoichiometric coefficient.
   
-We define the delay SSA problem
+We define the delay jump problem by 
 ```julia
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
-where `DelayJumpProblem` inputs `JumpSystem`, `DelayJumpProblem`, `DelayJumpSet`, the algorithm we choose and the initial condition of the delay channel `de_chan0`.
+where `DelayJumpProblem` inputs `JumpSystem`, `DelayJumpProblem`, `DelayJumpSet`, the algorithm and the initial condition of the delay channel `de_chan0`.
 ## Visualisation
 ```julia
 using DiffEqJump

@@ -1,7 +1,6 @@
 # An auto-regulatory model of oscillatory gene expression
 Let us study the following auto-regulatory network with delay.
 ## Model
-
 The model is defined as follows:
 ```math
 \emptyset \xrightarrow{J_1(Y)} X\\
@@ -13,55 +12,32 @@ According to [[1]](https://www.nature.com/articles/s41467-021-22919-1), it's an 
 ```math
 J_1(Y)=k_1S\frac{K^p_d}{K^p_d+Y^p}\\J_2(Y)=k_2E_T\frac{Y}{K_m+Y}
 ```
-In this example, we assume $k_1=k_2=S=E_T=K_d=P=K_m=1$ for convenience.
+In this example, we assume $k_1=k_2=S=E_T=K_d=K_m=1, p =2$ for simplicity.
 
 ## Markovian part
-
-Since the rate varies with the number of molecules of $Y$, we should define `ConstantRateJump`
-
+We can define the Markovian part of the system using Catalyst
 ```julia
-rate1 = (u,p,t) -> 1/(1+u[2]^2)
-affect1! = function (integrator)
-integrator.u[1] += 1
+rn = @reaction_network begin
+    1/(1+Y^2), 0 --> X
+    1/(1+Y),   Y --> 0
 end
-cons_jump1 = ConstantRateJump(rate1,affect1!)
-
-rate2 = (u,p,t) -> u[2]/(1+u[2])
-affect2! = function (integrator)
-integrator.u[2] -= 1
-end
-cons_jump2 = ConstantRateJump(rate2,affect2!)
 ```
-
-`rates` A function showing how the rate varies with the change of molecules of $Y$.
-
-`affect!` is a function that shows the net change in the species when the reaction occurs.
-
-Then we can define the `JumpSet`
-
+Then we convert the reaction network to a `JumpSystem`
 ```julia
-jumpset = JumpSet((),(cons_jump1,cons_jump2),nothing,nothing)
+jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws=false)
 ```
-
-Then we initialise the problem by setting
-
+We initialise the problem by setting
 ```julia
 u0 = [0,0]
 de_chan0 = [[]]
 tf = 400.
 tspan = (0,tf)
 τ = 20.
-```
-
-So we can define the `DiscreteProblem`
-
-```julia
-dprob = DiscreteProblem(u0, tspan)
+dprob = DiscreteProblem(jumpsys, u0, tspan)
 ```
 
 ## Non-Markovian part
-The same as we did before, we must define the `DelayJumpSet`
-
+We define the `DelayJumpSet` by
 ```julia
 delay_trigger_affect! = function (integrator, rng)
     append!(integrator.de_chan[1], τ)
@@ -71,40 +47,29 @@ delay_complete = Dict(1=>[2=>1, 1=>-1])
 delay_interrupt = Dict()
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 ```
-
-We can see how to define the  `DelayJumpSet` in [this example](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/bursty/).
-
-So we can define the `DelayJumpProblem`
-
+To see how to define the `DelayJumpSet`, we refers to [this example](tutorials.md).
+Thus, we can define the `DelayJumpProblem` by 
 ```julia
-djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
+djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true)).
 ```
-
-where `DelayJumpProblem` inputs `DiscreteProblem`, `JumpSet`,`DelayJumpSet`, the algorithm we choose and the initial condition of the delay channel `de_chan0`.
-
 ## Solution and Visualisation
-
 Now we can solve the problem and plot two trajectories of $X$ and $Y$.
-
 ```julia
-sol_1 = solve(djprob, SSAStepper())
-sol_2 = solve(djprob, SSAStepper())
+sol_1 = solve(djprob, SSAStepper(), seed = 1)
+sol_2 = solve(djprob, SSAStepper(), seed = 2)
 ```
 ![oscillator1](../assets/oscillator1.svg)
-
 ![oscillator2](../assets/oscillator2.svg)
 
 Then we simulate $10^4$ trajectories and calculate the evolution of mean value for each reactant.
-
 ```julia
 using StatsBase
-Sample_size = Int(1e4)
 ens_prob = EnsembleProblem(djprob)
-ens = solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = Sample_size, saveat = .1, save_delay_channel =false)
+ens = solve(ens_prob,SSAStepper(), EnsembleThreads(), trajectories = 1e4, saveat = .1)
 ```
 ![oscillator3](../assets/oscillator3.svg)
 
-If we want to see how the mean of $Y$ varies according to the mean of $X$, we will find the following oscillatory orbit in the phase diagram.
+If we want to see how the mean of $Y$ varies with respect to the mean of $X$, we will find the following oscillatory orbit in the phase diagram.
 
 ![oscillator4](../assets/oscillator4.gif)
 

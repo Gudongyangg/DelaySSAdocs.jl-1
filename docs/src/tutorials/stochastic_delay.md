@@ -12,7 +12,7 @@ We set $\sigma_{\text{on}}=0.0282$, $\sigma_{\text{off}}=0.609$ and $\rho=2.11$.
 
 ### Markovian part
 
-We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details).
+We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) or [second part of Tutorials](tutorials.md) for details).
 
 ```julia
 using DiffEqJump, DelaySSAToolkit
@@ -35,7 +35,6 @@ dprob = DiscreteProblem(u0, tspan)
 ```
 ### Non-Markovian part
 Unlike other examples, the elongation time $\tau$ is a random variable sampled from two different lognormal distributions. We assume $\tau\sim \text{LogNormal}(0,2)+120$ and $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$. Here we take  $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$ for example.
-
 ```julia
 delay_trigger_affect! = function (integrator, rng)
     τ=rand(LogNormal(1,sqrt(2)))+120
@@ -46,6 +45,7 @@ delay_complete = Dict(1=>[3=>-1])
 delay_interrupt = Dict() 
 delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
+
 So we can define the problem
 ```julia
 djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(false,false))

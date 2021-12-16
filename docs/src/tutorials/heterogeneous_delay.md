@@ -38,7 +38,7 @@ dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
-Here the value of `delay_trigger` is `[1=>τ]`. This is of `Pair` type where the first index means the number of delay channel, the second index represents the delay time. Such a definition is equivalent to pushing a delay time $\tau$ to the first delay channel provided that the reaction $A_n: 0\rightarrow X$ happened.
+Here the value of `delay_trigger` is `[1=>τ]`. This is of `Pair` type where the first index refers to the number of delay channel, the second index refers to the delay time. Such a definition is equivalent to pushing a delay time $\tau$ to the first delay channel provided that the first reaction $A_n: 0\rightarrow X$ happened.
 
 ## Heterogeneous fixed delays
 ### Define `EnsembleProblem` 
@@ -54,14 +54,14 @@ end
 ensprob1 = EnsembleProblem(jprob, prob_func = prob_func)
 @time ens1 = solve(ensprob1, SSAStepper(), EnsembleThreads(), trajectories = 40, saveat = 1.)
 ```
-For each simulation $i$ (represents an individual cell), a set of parameters $A, B, τ$ will be drawn from Gamma distributions, where the parameters are defined as in [1]. One only needs to reconstruct the `DelayJumpProblem` by invoking the function `remake` for each different simulation.
+For each simulation $i$ (represents an individual cell), a set of parameters $A, B, τ$ will be drawn from Gamma distributions, where we use the parameters defined as in [1]. One only needs to reconstruct the `DelayJumpProblem` by invoking the function `remake` for each different simulation.
 
 ## Visualisation
-We plot the time evolution of 40 simulations.
+We can plot the time evolution of 40 simulations.
 ![heterogeneous1](../assets/heterogeneous_delay1.svg)
 
 ## Distributed delays
-In [1, Section 3.2], the authors considerd the case with distributed delay, where the delay can vary between reactions within and between cells. One can adopt the problem setting only by few lines of code.
+In [1, Section 3.2], the authors studied the case with distributed delays, where the delay can vary between reactions within and between cells. One can adopt the problem setting by changing few lines of code.
 ### Define `EnsembleProblem` 
 ```julia
 function prob_func(prob, i ,repeat)
