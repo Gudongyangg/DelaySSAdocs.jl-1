@@ -4,13 +4,12 @@ CurrentModule = DelaySSAdocs
 
 # [DelaySSAToolkit](@id DelaySSAToolkit_doc)
 
-Gillespie developed a stochastic simulation algorithm (SSA) to simulate stochastic dynamics of chemically reacting systems [1]. In SSA algorithm, it is assumed that all reactions occur instantaneously. While in many biochemical reactions, such as gene transcription and translation, it can take certain time to finish after the reactions are initiated [2]. Neglecting delays in certain cases may still produce acceptable results, but in some delay-sensitive cases, such as delay-induced oscillators, neglecting delays in simulation will lead to erroneous conclusions. To solve this problem, an exact SSA for chemical reaction systems with delays，Delay SSA [3-5] was proposed, based upon the same fundamental premise of stochastic kinetics used by Gillespie in the development of his SSA.
-
+The complexity of cellular biochemistry prevents a full stochastic description of all reaction events and rather these models are effective, in the sense that each reaction provides an effective description of a group of processes. A major assumption behind the majority of stochastic models of biochemical kinetics is the memoryless hypothesis, i.e., the stochastic dynamics of the reactants is only influenced by the current state of the system, which implies that the waiting times for reaction events obey exponential distributions. Gillespie developed a stochastic simulation algorithm (SSA) to simulate stochastic dynamics for such systems [1].  While this Markovian assumption considerably simplifies model analysis, it is dubious for modelling certain non-elementary reaction events that encapsulate multiple intermediate reaction steps [2]. For example, consider a model of transcription that predicts the distribution of RNA polymerase (RNAP) numbers attached to the gene but which does not explicitly model the microscopic processes behind elongation. In this case, assuming that RNA synthesis proceeds with approximately constant elongation speed, the reaction modelling termination should occur a fixed time after the reaction modelling initiation, which implies that the system has memory and is not Markovian. To simulate such problems, several exact SSA methods for chemical reaction systems with delays (also known as delay SSA) were proposed [3-5]. 
 
 DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) which solves the stochastic simulation with delay and contains the following features:
 
 ## Features
-- Various delay stochastic simulation algorithms are provided;
+- Various exact delay stochastic simulation algorithms are integrated;
 - Stochastic delay type is supported;
 - Multiple delay channels and simultaneous delay reactions are supported;
 - A cascade of delay reactions is supported (a delay reaction that incurs other delay reactions);
@@ -24,6 +23,22 @@ DelaySSAToolkit can be installed through the Julia package manager:
 ]add https://github.com/palmtree2013/DelaySSAToolkit.jl
 using DelaySSAToolkit
 ```
+and you might need to run
+```julia
+using Pkg
+Pkg.instantiate()
+```
+for the first time after installation.
+
+## Recommendations for better performance 
+For constructing a `DelayJumpProblem`, here are few recommendations for better performance:
+
+- Use Catalyst.jl to build your Markovian model (model without delays). For certain algorithms that need dependency graph, it will be auto-generated. Otherwise you must explicitly construct and pass in these mappings using `JumpSet` (see [Jump Problems](https://diffeq.sciml.ai/stable/types/jump_types/#Jump-Problems) for details).
+
+- For a small number of jumps, `DelayRejction` and `DelayDirect` will often perform better than other aggregators.
+
+- For large numbers of jumps with sparse chain like structures and similar jump rates, for example continuous time random walks, `DelayDirectCR` and `DelayMNRM` often have the best performance.
+
 ## References
 
 [1] Daniel T. Gillespie, "Exact stochastic simulation of coupled chemical reactions", The Journal of Physical Chemistry 1977 81 (25), 2340-2361.

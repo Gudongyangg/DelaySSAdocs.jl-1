@@ -48,7 +48,7 @@ f_\mu(\mu)={{a_\mu(t)} \over {a_0(t)}},\ \ \ \ \  \mu = 1,\ldots,M,
 
 where $a_0(t)=\begin{matrix} \sum_{k=1}^M a_k(t) \end{matrix}$. According to the PDF Eq. ([4](#mjx-eqn-4)), a realization of $\mu$ can be generated from a standard uniform random variable $r_2$, by taking $\mu$ to be the integer for which $\sum_{k=1}^{\mu-1} a_k(t)  < r_2 a_0(t) \leq \sum_{k=1}^\mu a_k(t)$;based on the PDF Eq. ([3](#mjx-eqn-3)), a realization of $\Delta$ can be generated from another standard uniform random variable $r_1$ as $\Delta=−\ln(r_1)/a_0(t)$. Therefore, Gillespie’s exact SSA generates a realization of $\mu$ and $\Delta$ in each step of simulation, and then updates the time and system state as $t\leftarrow t+\Delta$ and  $\mathbf{x} \leftarrow \mathbf{x}+ \mathbf{\nu_\mu}$, respectively.
 
-## Exact SSA for coupled chemical reaction with delays
+## Exact SSA for stochastic modelling coupled with delays
 
 ### Delay direct method
 

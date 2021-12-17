@@ -20,3 +20,8 @@ Because the assumption above only pertains to the initiation times of reactions 
 **Case 2**: If reaction $k$ is in $\text{CD}$ and initiates at time $t$, then the system is updated only at the time of completion, $t + \tau_k$, by losing the reactant species and gaining the product species.
 
 **Case 3**: If reaction $k$ is in $\text{ICD}$ and initiates at time $t$, then the system is updated by losing the reactant species at the time of initiation, $t$, and is updated by gaining the product species at the time of completion,$t + \tau_k$.
+
+## Reference
+[1] David F. Anderson, "A modified Next Reaction Method for simulating chemical systems with time dependent propensities and delays", The Journal of Chemical Physics 128, 109903(2008).
+[https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998).
+

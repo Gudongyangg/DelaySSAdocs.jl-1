@@ -32,6 +32,7 @@ for the first time after installation.
 
 More information is available in the [documentation](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/). Please feel free to open issues and submit pull requests!
 
+
 ## Examples
 ### SEIR model
 Check [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/tutorials/) for more details.
@@ -103,6 +104,16 @@ ensprob = EnsembleProblem(jprob)
 @time ens = solve(ensprob, SSAStepper(), EnsembleThreads(), trajectories=10^5)
 ```
 ![bursty](docs/src/assets/bursty.svg)
+
+
+## Recommendations for better performance 
+For constructing a `DelayJumpProblem`, here are few recommendations for better performance:
+
+- Use Catalyst.jl to build your Markovian model (model without delays). For certain algorithms that need dependency graph, it will be auto-generated. Otherwise you must explicitly construct and pass in these mappings using `JumpSet` (see [Jump Problems](https://diffeq.sciml.ai/stable/types/jump_types/#Jump-Problems) for details).
+
+- For a small number of jumps, `DelayRejction` and `DelayDirect` will often perform better than other aggregators.
+
+- For large numbers of jumps with sparse chain like structures and similar jump rates, for example continuous time random walks, `DelayDirectCR` and `DelayMNRM` often have the best performance.
 
 ## References
 [1] Daniel T. Gillespie, "Exact stochastic simulation of coupled chemical reactions", The Journal of Physical Chemistry 1977 81 (25), 2340-2361.
