@@ -30,8 +30,8 @@ Pkg.instantiate()
 ```
 for the first time after installation.
 
-## Recommendations for better performance 
-For constructing a `DelayJumpProblem`, here are few recommendations for better performance:
+## Recommendations  
+For constructing a `DelayJumpProblem`, here are few recommendations for good performance:
 
 - Use Catalyst.jl to build your Markovian model (model without delays). For certain algorithms that need dependency graph, it will be auto-generated. Otherwise you must explicitly construct and pass in these mappings using `JumpSet` (see [Jump Problems](https://diffeq.sciml.ai/stable/types/jump_types/#Jump-Problems) for details).
 
