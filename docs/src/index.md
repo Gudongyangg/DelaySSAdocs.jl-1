@@ -33,7 +33,7 @@ for the first time after installation.
 ## Recommendation  
 To solve a `DelayJumpProblem`, here are few recommendations for good performance:
 
-- Use Catalyst.jl to build your Markovian model (model without delays). For certain algorithms that need dependency graph, it will be auto-generated. Otherwise you must explicitly construct and pass in these mappings using `JumpSet` (see [Jump Problems](https://diffeq.sciml.ai/stable/types/jump_types/#Jump-Problems) for details).
+- Use Catalyst.jl to build your Markovian model (model without delays). For certain algorithms that need dependency graph, it will be auto-generated. Otherwise you must explicitly construct and pass these mappings in `JumpSet` (see [Jump Problems](https://diffeq.sciml.ai/stable/types/jump_types/#Jump-Problems) for details).
 
 - For a small number of jumps, `DelayRejection` and `DelayDirect` will often perform better than other aggregators.
 
