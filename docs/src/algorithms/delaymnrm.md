@@ -12,7 +12,7 @@ N_k(t)=Y_k\Big(\int^t_0a_k(X(s))ds\Big)\tag{1}
 ```
 where the $Y_k$ are independent, unit rate Poisson processes. Thus, $X(t)$ can be represented as the solution to the following equation:
 ```math
-X(t)=X(0)+\sum_{k=1}^M{Y_k(\int^t_0a_k(X(s))ds)(v'_k-v_k)}
+X(t)=X(0)+\sum_{k=1}^M{Y_k\Big(\int^t_0a_k(X(s))ds\Big)(v'_k-v_k)}
 ```
 All of the randomness in the system is encapsulated in the $Y^{'}_ks$ and has therefore been separated from the state of the system. Thus, the system only changes when one of the $Y^{'}_ks$ changes. There are actually $M + 1$ relevant time frames in the system. The first time frame is the actual, or absolute time, $t$. However, each Poisson process $Y_k$ brings its own time frame. Thus, if we define $T_k(t)=\int^t_0a_k(X(s))ds$ for each $k$, then it is relevant for us to consider $Y_k(T_k(t))$. We will call $T_k(t)$ the "internal time" for reaction $k$.
 
