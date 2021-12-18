@@ -27,17 +27,17 @@ Because the assumption above only pertains to the initiation times of reactions 
 
 ## Reference
 [1] Dmitri A. Bratsun, Dmitri N. Volfson, Jeff Hasty, and Lev S. Tsimring "Non-Markovian processes in gene regulation (Keynote Address)", Proc. SPIE 5845, Noise in Complex Systems and Stochastic Dynamics III, (23 May 2005).
-[https://doi.org/10.1117/12.609707](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/5845/1/Non-Markovian-processes-in-gene-regulation/10.1117/12.609707.full)
+[https://doi.org/10.1117/12.609707](https://doi.org/10.1117/12.609707)
 
 [2] Manuel Barrio, Kevin Burrage, André Leier, Tianhai Tian. "Oscillatory Regulation of Hes1: Discrete Stochastic Delay Modelling and Simulation", PLoS Computational Biology, 10.1371(2006).
 [https://doi.org/10.1371/journal.pcbi.0020117](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.0020117)
 
 [3] Xiaodong Cai, "Exact stochastic simulation of coupled chemical reactions with delays", The Journal of Chemical Physics 126, 124108(2007).
-[https://doi/10.1063/1.2710253](https://aip.scitation.org/doi/10.1063/1.2710253).
+[https://doi/10.1063/1.2710253](https://aip.scitation.org/doi/10.1063/1.2710253)
 
 [4] David F. Anderson, "A modified Next Reaction Method for simulating chemical systems with time dependent propensities and delays", The Journal of Chemical Physics 128, 109903(2008).
-[https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998).
+[https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998)
 
-[5]
+[5] Slepoy, Alexander, Aidan P. Thompson, and Steven J. Plimpton. "A constant-time kinetic Monte Carlo algorithm for simulation of large biochemical reaction networks." The journal of chemical physics 128, no. 20 (2008): 05B618. [https://doi.org/10.1063/1.2919546](https://doi.org/10.1063/1.2919546)
 
-[6]
+[6] Mauch, Sean, and Mark Stalzer. "Efficient formulations for exact stochastic simulation of chemical systems." IEEE/ACM Transactions on Computational Biology and Bioinformatics 8, no. 1 (2009): 27-35. [https://doi.org/10.1109/TCBB.2009.47](https://doi.org/10.1109/TCBB.2009.47)
