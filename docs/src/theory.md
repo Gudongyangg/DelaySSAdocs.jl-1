@@ -178,10 +178,10 @@ The rigorous proof of [delay rejection method](@ref delay_rejection_method) open
 ## Reference
 
 [1] Daniel T. Gillespie, "Exact stochastic simulation of coupled chemical reactions", The Journal of Physical Chemistry 1977 81 (25), 2340-2361.
-[https://doi.org/10.1021/j100540a008](https://doi.org/10.1021/j100540a008).
+[https://doi.org/10.1021/j100540a008](https://doi.org/10.1021/j100540a008)
 
 [2] Xiaodong Cai, "Exact stochastic simulation of coupled chemical reactions with delays", The Journal of Chemical Physics 126, 124108(2007).
-[https://doi/10.1063/1.2710253](https://aip.scitation.org/doi/10.1063/1.2710253).
+[https://doi/10.1063/1.2710253](https://aip.scitation.org/doi/10.1063/1.2710253)
 
 [3] Dmitri A. Bratsun, Dmitri N. Volfson, Jeff Hasty, and Lev S. Tsimring "Non-Markovian processes in gene regulation (Keynote Address)", Proc. SPIE 5845, Noise in Complex Systems and Stochastic Dynamics III, (23 May 2005).
 [https://doi.org/10.1117/12.609707](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/5845/1/Non-Markovian-processes-in-gene-regulation/10.1117/12.609707.full)

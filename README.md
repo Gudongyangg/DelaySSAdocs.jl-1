@@ -120,21 +120,20 @@ To solve a `DelayJumpProblem`, here are few recommendations for good performance
 - For large numbers of jumps with sparse chain like structures and similar jump rates, for example continuous time random walks, `DelayDirectCR` and `DelayMNRM` often have the best performance.
 
 ## Other related packages
+- [FiniteStateProjection.jl](https://github.com/kaandocal/FiniteStateProjection.jl): Finite State Projection algorithms for chemical reaction networks.
 - [MomentClosure.jl](https://github.com/augustinas1/MomentClosure.jl): Tools to generate and study moment equations for any chemical reaction network using various moment closure approximations.
-
-- [FiniteStateProjection.jl](https://github.com/kaandocal/FiniteStateProjection.jl): Finite State Projection algorithms for chemical reaction networks
 
 ## References
 <a id="1">[1]</a> Daniel T. Gillespie, "Exact stochastic simulation of coupled chemical reactions", The Journal of Physical Chemistry 1977 81 (25), 2340-2361.
-[https://doi.org/10.1021/j100540a008](https://doi.org/10.1021/j100540a008).
+[https://doi.org/10.1021/j100540a008](https://doi.org/10.1021/j100540a008)
 
 <a id="2">[2]</a> Barrio, Manuel, Kevin Burrage, André Leier, and Tianhai Tian. "Oscillatory regulation of Hes1: discrete stochastic delay modelling and simulation." PLoS computational biology 2, no. 9 (2006): e117. [https://doi.org/10.1371/journal.pcbi.0020117](https://doi.org/10.1371/journal.pcbi.0020117)
 
 <a id="3">[3]</a> Xiaodong Cai, "Exact stochastic simulation of coupled chemical reactions with delays", The Journal of Chemical Physics 126, 124108(2007).
-[https://doi/10.1063/1.2710253](https://aip.scitation.org/doi/10.1063/1.2710253).
+[https://doi/10.1063/1.2710253](https://aip.scitation.org/doi/10.1063/1.2710253)
 
 <a id="4">[4]</a> David F. Anderson, "A modified Next Reaction Method for simulating chemical systems with time dependent propensities and delays", The Journal of Chemical Physics 128, 109903(2008).
-[https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998).
+[https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998)
 
 <a id="5">[5]</a> Slepoy, Alexander, Aidan P. Thompson, and Steven J. Plimpton. "A constant-time kinetic Monte Carlo algorithm for simulation of large biochemical reaction networks." The journal of chemical physics 128, no. 20 (2008): 05B618. [https://doi.org/10.1063/1.2919546](https://doi.org/10.1063/1.2919546)
 

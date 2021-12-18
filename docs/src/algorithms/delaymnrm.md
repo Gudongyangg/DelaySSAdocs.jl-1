@@ -60,4 +60,4 @@ where $t$ is the current time of the system. These ideas form the heart of the N
 ## Reference
 
 [1] David F. Anderson, "A modified Next Reaction Method for simulating chemical systems with time dependent propensities and delays", The Journal of Chemical Physics 128, 109903(2008).
-[https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998).
+[https://doi/10.1063/1.2799998](https://aip.scitation.org/doi/10.1063/1.2799998)
