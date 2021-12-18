@@ -50,14 +50,14 @@ tf = 400.
 tspan = (0,tf)
 ps = [1e-4, 1e-2]
 
-# Model: delay reactions
+# Model: non-Markovian part (delay reactions)
 τ = 20.
 delay_trigger_affect! = function (integrator, rng)
-    append!(integrator.de_chan[1], τ)
+    append!(integrator.de_chan[1], τ) # add a delay time τ to the first delay channel
 end
-# the first reaction S+I -> E+I will trigger a delay reaction by adding τ to the first delay channel
+# the first reaction S+I -> E+I will trigger a delay reaction: E --> I after τ time.  
 delay_trigger = Dict(1=>delay_trigger_affect!)  
-# net change in stoichiometric coefficient: Transfer from E to I after the completed delay reaction
+# E --> I after τ time: transfer from E (minus 1) to I (plus 1) after the completed delay reaction
 delay_complete = Dict(1=>[2=>1, 3=>-1]) 
 delay_interrupt = Dict()
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
