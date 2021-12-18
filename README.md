@@ -5,7 +5,7 @@
 [![Build Status](https://github.com/palmtree2013/DelaySSAdocs.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/palmtree2013/DelaySSAdocs.jl/actions/workflows/CI.yml?query=branch%3Amain)
 <!-- [![Coverage](https://codecov.io/gh/palmtree2013/DelaySSAdocs.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/palmtree2013/DelaySSAdocs.jl) -->
 
-DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) in Julia which solves the stochastic simulation [[1]](#1) with delay and contains the following features:
+DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl) in Julia which solves the stochastic simulation [[1]](#1) coupled with delays and contains the following features:
 
 ## Features
 - Various delay stochastic simulation algorithms are provided [[2-6]](#2);
@@ -13,14 +13,14 @@ DelaySSAToolkit.jl is a tool developed on top of [DiffEqJump.jl](https://github.
 - Multiple delay channels and simultaneous delay reactions are supported;
 - A cascade of delay reactions is supported (a delay reaction that incurs other delay reactions);
 - Priority queue and dependency graph are integrated for high computational performance;
-- Ecosystem with [Catalyst](https://github.com/SciML/Catalyst.jl), [DiffEqJump](https://github.com/SciML/DiffEqJump.jl), [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) and more...
+- Ecosystem with [Catalyst.jl](https://github.com/SciML/Catalyst.jl), [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl), [DifferentialEquations.jl](https://github.com/JuliaDiffEq/DifferentialEquations.jl) and more...
 
 This repo is for documentaion, the source code of DelaySSAToolkit.jl is coming soon once the documentation is finished ...
 
 ## Installation
 DelaySSAToolkit can be installed through the Julia package manager:
 ```julia 
-add https://github.com/palmtree2013/DelaySSAToolkit.jl
+]add https://github.com/palmtree2013/DelaySSAToolkit.jl
 using DelaySSAToolkit
 ```
 and you might need to run
@@ -39,30 +39,34 @@ Check [this example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutor
 ```julia
 using DelaySSAToolkit, Catalyst
 using DiffEqJump
-
+# Model: Markovian part
 rn = @reaction_network begin
     ρ, S+I --> E+I
     r, I --> R
 end ρ r
-
-u0 = [999,1,0,0]
+u0 = [999,1,0,0] # S, I, E, R
 de_chan0 = [[]]
 tf = 400.
 tspan = (0,tf)
 ps = [1e-4, 1e-2]
+
+# Model: delay reactions
 τ = 20.
 delay_trigger_affect! = function (integrator, rng)
     append!(integrator.de_chan[1], τ)
 end
-delay_trigger = Dict(1=>delay_trigger_affect!) # the first reaction S+I -> E+I will trigger a delay reaction by adding τ to the delay channel 
-delay_complete = Dict(1=>[2=>1, 3=>-1]) # Transfer from E to I after the completed delay reaction
+# the first reaction S+I -> E+I will trigger a delay reaction by adding τ to the first delay channel
+delay_trigger = Dict(1=>delay_trigger_affect!)  
+# net change in stoichiometric coefficient: Transfer from E to I after the completed delay reaction
+delay_complete = Dict(1=>[2=>1, 3=>-1]) 
 delay_interrupt = Dict()
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 
+# convert the ReactionSystem to a JumpSystem
 jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws=false)
 dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
-jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true))
-sol = solve(jprob, SSAStepper())
+djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true))
+sol = solve(djprob, SSAStepper())
 ```
 ![seir](docs/src/assets/seir.svg)
 
@@ -71,19 +75,19 @@ Check this [example](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutor
 ```julia
 using DelaySSAToolkit
 using Catalyst, DiffEqJump
-begin # construct reaction network
-    @parameters a b t
-    @variables X(t)
-    burst_sup = 30
-    rxs = [Reaction(a*b^i/(1+b)^(i+1),nothing,[X],nothing,[i]) for i in 1:burst_sup]
-    rxs = vcat(rxs)
-    @named rs = ReactionSystem(rxs,t,[X],[a,b])
-end
+# Model: Markovian part
+@parameters a b t
+@variables X(t)
+burst_sup = 30
+rxs = [Reaction(a*b^i/(1+b)^(i+1),nothing,[X],nothing,[i]) for i in 1:burst_sup]
+rxs = vcat(rxs)
+@named rs = ReactionSystem(rxs,t,[X],[a,b])
 u0 = [0]
 de_chan0 = [[]]
 tf = 200.
 tspan = (0,tf)
 ps = [0.0282, 3.46]
+# Model: non-Markovian part
 τ = 130.
 delay_trigger_affect! = []
 for i in 1:burst_sup
@@ -98,9 +102,9 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 
 # convert the ReactionSystem to a JumpSystem
 jumpsys = convert(JumpSystem, rs, combinatoric_ratelaws=false)
-dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
-jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
-ensprob = EnsembleProblem(jprob)
+dprob = DiscreteProblem(jumpsys, u0, tspan, ps)
+djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
+ensprob = EnsembleProblem(djprob)
 @time ens = solve(ensprob, SSAStepper(), EnsembleThreads(), trajectories=10^5)
 ```
 ![bursty](docs/src/assets/bursty.svg)
@@ -114,6 +118,11 @@ To solve a `DelayJumpProblem`, here are few recommendations for good performance
 - For a small number of jumps, `DelayRejection` and `DelayDirect` will often perform better than other aggregators.
 
 - For large numbers of jumps with sparse chain like structures and similar jump rates, for example continuous time random walks, `DelayDirectCR` and `DelayMNRM` often have the best performance.
+
+## Other related packages
+- [MomentClosure.jl](https://github.com/augustinas1/MomentClosure.jl): Tools to generate and study moment equations for any chemical reaction network using various moment closure approximations.
+
+- [FiniteStateProjection.jl](https://github.com/kaandocal/FiniteStateProjection.jl): Finite State Projection algorithms for chemical reaction networks
 
 ## References
 <a id="1">[1]</a> Daniel T. Gillespie, "Exact stochastic simulation of coupled chemical reactions", The Journal of Physical Chemistry 1977 81 (25), 2340-2361.
