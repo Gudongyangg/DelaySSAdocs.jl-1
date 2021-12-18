@@ -14,7 +14,7 @@ where the $Y_k$ are independent, unit rate Poisson processes. Thus, $X(t)$ can b
 ```math
 X(t)=X(0)+\sum_{k=1}^M{Y_k\Big(\int^t_0a_k(X(s))ds\Big)(v'_k-v_k)}
 ```
-All of the randomness in the system is encapsulated in the $Y_k$'s and has therefore been separated from the state of the system. Thus, the system only changes when one of the $Y_k$'s changes. There are actually $M + 1$ relevant time frames in the system. The first time frame is the actual, or absolute time, $t$. However, each Poisson process $Y_k$ brings its own time frame. Thus, if we define $T_k(t)=\int^t_0a_k(X(s))ds$ for each $k$, then it is relevant for us to consider $Y_k(T_k(t))$. We will call $T_k(t)$ the "internal time" for reaction $k$.
+All of the randomness in the system is encapsulated in the $Y_k$'s and has therefore been separated from the state of the system. Thus, the system only changes when one of the $Y_k$'s changes. There are actually $M + 1$ relevant time frames in the system. The first time frame is the actual, or absolute time, $t$. However, each Poisson process $Y_k$ brings its own time frame. Thus, if we define $T_k(t)=\int^t_0a_k(X(s))ds$ for each $k$, then it is relevant for us to consider $Y_k(T_k(t))$. We will call $T_k(t)$ the "**internal time**" for reaction $k$.
 
 We denote by $P_k$ the first firing time of $Y_k$, in the time frame of $Y_k$, which is strictly larger than  $T_k$. That is, $P_k=\min \left\{s>T_k:Y_k(s)>Y(T_k)\right\}$. The main idea of the following algorithm is that by Eq.(1) the value
 ```math
@@ -28,11 +28,11 @@ Now we extend the above notions to the delay system. No matter whether a reactio
 ```
 where the $Y_k$ are independent, unit rate Poisson processes.
 
-Because the initiations are still given by the firing times of independent Poisson processes. Therefore, if $T_k$ is the current internal time of $Y_k$, $P_k$ the first internal time after $T_k$ at which $Y_k$ fires, and the propensity function for the $k$th reaction channel is given by $a_k$, then the time until the next initiation of reaction $k$(assuming no other reactions initiate or complete) is still given by $\Delta t_k= (P_k−T_k)/a_k$. The only change to the algorithm will be in keeping track and storing the delayed completions. To each delayed reaction channel we therefore assign a vector, $s_k$, that stores the completion times of that reaction in ascending order. Thus, the time until there is a change in the state of the system, be it an initiation or a completion, will be given by:
+Because the initiations are still given by the firing times of independent Poisson processes. Therefore, if $T_k$ is the current internal time of $Y_k$, $P_k$ the first internal time after $T_k$ at which $Y_k$ fires, and the propensity function for the $k$th reaction channel is given by $a_k$, then the time until the next initiation of reaction $k$(assuming no other reactions initiate or complete) is still given by $\Delta t_k= (P_k−T_k)/a_k$. The only change to the algorithm will be in keeping track and storing the delayed completions. To each delayed reaction channel we therefore assign a vector, $s_l$, that stores the completion times of that reaction in ascending order for $l=1,\ldots,L$ where $L$ is the total number of delay channels. Thus, the time until there is a change in the state of the system, be it an initiation or a completion, will be given by:
 ```math
-\Delta = \min\{\Delta t_k, s_k(1) − t\}
+\Delta = \min\{\min_{k\in \{1,\ldots,M\}}\{\Delta t_k\}, \min_{l\in\{1,\ldots,L\}}\{s_l(1) − t\}\}
 ```
-where $t$ is the current time of the system. These ideas form the heart of our Next Reaction Method [1] for systems with delays.
+where $t$ is the current time of the system. These ideas form the heart of the Next Reaction Method [1] for systems with delays.
 
 ## Algorithm
 
@@ -40,7 +40,7 @@ where $t$ is the current time of the system. These ideas form the heart of our N
 2. Calculate the propensity function, $a_k$, for each reaction.
 3. Generate $M$ independent, uniform$(0,1)$ random numbers, $r_k$, and set $P_k = \ln(1/r_k)$.
 4. Set $\Delta t_k = (P_k − T_k)/a_k$.
-5. Set $\Delta = \min_k\{\Delta t_k, s_k(1) − t\}$.
+5. Set $\Delta = \min\{\min_{k\in \{1,\ldots,M\}}\{\Delta t_k\}, \min_{l\in\{1,\ldots,L\}}\{s_l(1) − t\}\}$.
 6. Set $t = t + \Delta$.
 7. If we chose the completion of the delayed reaction $\mu$:
    - Update the system based upon the completion of the reaction $\mu$.
