@@ -6,7 +6,7 @@ Let $v_k$, $v'_k\in Z^N_{\geq 0}$ be the vectors representing the number of each
 ```math
 X(t)=X(0)+\sum_{k=1}^M{N_k(t)(v^{'}_k-v_k)}
 ```
-However, based upon the fundamental premise of stochastic chemical kinetics, $N_k(t)$ is a counting process with intensity $a_k(X(t))$ such that $\text{P}(N_k(t+\Delta t)-N_k(t)=1|X(s),s\leqslant t)=a_k(X(t))\Delta t$ for small $\Delta t$. Therefore,
+However, based upon the fundamental premise of stochastic chemical kinetics, $N_k(t)$ is a counting process with intensity $a_k(X(t))$ such that $\text{P}(N_k(t+\Delta t)-N_k(t)=1|X(s),s\leqslant t)=a_k(X(t))\Delta t$ for small $\Delta t$. Therefore, based upon the [counting process interpretation](https://en.wikipedia.org/wiki/Poisson_point_process), we have
 ```math
 N_k(t)=Y_k\Big(\int^t_0a_k(X(s))ds\Big)\tag{1} 
 ```
@@ -14,7 +14,7 @@ where the $Y_k$ are independent, unit rate Poisson processes. Thus, $X(t)$ can b
 ```math
 X(t)=X(0)+\sum_{k=1}^M{Y_k\Big(\int^t_0a_k(X(s))ds\Big)(v'_k-v_k)}
 ```
-All of the randomness in the system is encapsulated in the $Y^{'}_ks$ and has therefore been separated from the state of the system. Thus, the system only changes when one of the $Y^{'}_ks$ changes. There are actually $M + 1$ relevant time frames in the system. The first time frame is the actual, or absolute time, $t$. However, each Poisson process $Y_k$ brings its own time frame. Thus, if we define $T_k(t)=\int^t_0a_k(X(s))ds$ for each $k$, then it is relevant for us to consider $Y_k(T_k(t))$. We will call $T_k(t)$ the "internal time" for reaction $k$.
+All of the randomness in the system is encapsulated in the $Y_k$'s and has therefore been separated from the state of the system. Thus, the system only changes when one of the $Y_k$'s changes. There are actually $M + 1$ relevant time frames in the system. The first time frame is the actual, or absolute time, $t$. However, each Poisson process $Y_k$ brings its own time frame. Thus, if we define $T_k(t)=\int^t_0a_k(X(s))ds$ for each $k$, then it is relevant for us to consider $Y_k(T_k(t))$. We will call $T_k(t)$ the "internal time" for reaction $k$.
 
 We denote by $P_k$ the first firing time of $Y_k$, in the time frame of $Y_k$, which is strictly larger than  $T_k$. That is, $P_k=\min \left\{s>T_k:Y_k(s)>Y(T_k)\right\}$. The main idea of the following algorithm is that by Eq.(1) the value
 ```math
