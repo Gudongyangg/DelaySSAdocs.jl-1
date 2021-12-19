@@ -1,7 +1,7 @@
 # An example of stochastic delay 
 
 ## Model
-According to [[1]](https://www.nature.com/articles/s41467-021-22919-1), the model assumes that the gene can switch between active $G$ and inactive $G^*$ states, transcribes nascent mRNA (denoted by  $N$) while in the active state which subsequently is removed a time $\tau$ later. Here the delay $\tau$ can be a random variable. We can define the model
+According to [1], the model assumes that the gene can switch between active $G$ and inactive $G^*$ states, transcribes nascent mRNA (denoted by  $N$) while in the active state which subsequently is removed a time $\tau$ later. Here the delay $\tau$ can be a random variable. We can define the model
 ```math
 G^*\xrightarrow{\sigma_{\text{on}}} G\\
 G\xrightarrow{\sigma_{\text{off}}}G^*\\

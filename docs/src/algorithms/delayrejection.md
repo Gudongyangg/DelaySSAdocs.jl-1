@@ -10,10 +10,10 @@ Simulation methods for systems with delays need to calculate when reactions init
 4. Generate an independent uniform $(0,1)$ random number, $r_1$, and set $\Delta = 1/a_0 \ln(1/r_1)$.
 5. If there is a delayed reaction set to finish in $[t, t + \Delta)$
    - Discard $\Delta$.
-   - Updatetto be the time of the next delayed reaction,$\mu$.
-   - Updatexaccording to the stored reaction $\mu$.
+   - Update $t$ to be the time of the next delayed reaction,$\mu$.
+   - Update $x$ according to the stored reaction $\mu$.
 6. Else
-   - Generate an independent uniform$(0,1)$ random number $r_2$.
+   - Generate an independent uniform $(0,1)$ random number $r_2$.
    - Find $\mu\in[1,\ldots, m]$ such that
    ```math
    \sum_{k=1}^{\mu-1} a_k(t) < r_2 a_0 \leq \sum_{k=1}^\mu a_k(t)

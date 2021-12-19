@@ -2,7 +2,7 @@
 
 ## Representation using Poisson processes 
 
-Let $v_k$, $v'_k\in Z^N_{\geq 0}$ be the vectors representing the number of each species consumed and created in the *k*th reaction, respectively. Then, if $N_k(t)$ is the number of initiations of reaction $k$ by time $t$, the state of the system at time $t$ is
+Let $v_k$, $v'_k\in Z^N_{\geq 0}$ be the vectors representing the number of each species consumed and created in the $k$th reaction, respectively. Then, if $N_k(t)$ is the number of initiations of reaction $k$ by time $t$, the state of the system at time $t$ is
 ```math
 X(t)=X(0)+\sum_{k=1}^M{N_k(t)(v^{'}_k-v_k)}
 ```
