@@ -72,7 +72,7 @@ Now we can define the `DelayJumpProblem` by
 djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true))
 ```
 where `DelayJumpProblem` inputs `jumpsys`,`DiscreteProblem`, `DelayJumpSet`, the algorithm we choose and the initial condition of the delay channel `de_chan0`. The optional augment `save_positions` is a Boolean tuple for whether to save before and after the event.
-Tnen one can use 
+Then one can use 
 ```julia
 sol = solve(djprob, SSAStepper())
 ```
