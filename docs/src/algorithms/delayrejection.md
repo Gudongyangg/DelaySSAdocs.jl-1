@@ -11,7 +11,7 @@ Simulation methods for systems with delays need to calculate when reactions init
 5. If there is a delayed reaction set to finish in $[t, t + \Delta)$
    - Discard $\Delta$.
    - Update $t$ to be the time of the next delayed reaction,$\mu$.
-   - Update $x$ according to the stored reaction $\mu$.
+   - Update $\mathbf{x}$ according to the stored reaction $\mu$.
 6. Else
    - Generate an independent uniform $(0,1)$ random number $r_2$.
    - Find $\mu\in[1,\ldots, m]$ such that

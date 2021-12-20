@@ -20,7 +20,7 @@ Define *Tstruct*, whose $i$th $(i=1,\dots,d)$ row stores $T_i$ and the index, $\
    - Else
      - Set $i=1$, $a_t = a_0T_1$ and  $F=1-e^{-a_t}$.
      -  While $F < r_1$
-         - Update the state vector $x_1$ due to the finish of the delayed reaction $t+T_i$.
+         - Update the state vector $\mathbf{x}$ due to the finish of the delayed reaction $t+T_i$.
          - Calculate propensity $a_k(t+T_{i+1})$ due to the finish of the delayed reaction at $t+T_{i+1}$ and calculate $a_0(t+T_{i+1})$.
          - Update $a_t=a_t+a_0(t+T_{i+1})(T_{i+1}-T_i)$.
          - Update $F=1-e^{-a_t},i=i+1$.
