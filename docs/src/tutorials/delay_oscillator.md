@@ -1,14 +1,13 @@
 # An auto-regulatory model of oscillatory gene expression
-Let us study the following auto-regulatory network with delay.
 ## Model
-The model is defined as follows:
+Let us study the following auto-regulatory network with delay. The model is defined as follows:
 ```math
 \emptyset \xrightarrow{J_1(Y)} X\\
  Y\xrightarrow{J_2(Y)} \emptyset
 ```
 and $\emptyset \xrightarrow{J_1(Y)} X$ will trigger $X\Rightarrow Y$ after $\tau$ time.
 
-According to [1], it's an Illustration of a model of auto-regulation whereby a protein $X$ is transcribed by a gene, then it is transformed after a delay time $\tau$ into a mature protein $Y$, which binds the promoter and represses transcription of $X$. The function $J_1(Y)$ and $J_2(Y)$ can be defined as follows:
+According to [1], it's an illustration of a model of auto-regulation whereby a protein $X$ is transcribed by a gene, then it is transformed after a delay time $\tau$ into a mature protein $Y$, which binds the promoter and represses the transcription of $X$. The function $J_1(Y)$ and $J_2(Y)$ is defined as follows:
 ```math
 J_1(Y)=k_1S\frac{K^p_d}{K^p_d+Y^p}\\J_2(Y)=k_2E_T\frac{Y}{K_m+Y}
 ```
@@ -24,18 +23,16 @@ end
 ```
 Then we convert the reaction network to a `JumpSystem`
 ```julia
-jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws=false)
+jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws=false).
 ```
 We initialise the problem by setting
 ```julia
 u0 = [0,0]
-de_chan0 = [[]]
 tf = 400.
 tspan = (0,tf)
 τ = 20.
 dprob = DiscreteProblem(jumpsys, u0, tspan)
 ```
-
 ## Non-Markovian part
 We define the `DelayJumpSet` by
 ```julia
@@ -50,6 +47,7 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 To see how to define the `DelayJumpSet`, we refers to [this example](tutorials.md).
 Thus, we can define the `DelayJumpProblem` by 
 ```julia
+de_chan0 = [[]]
 djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true)).
 ```
 ## Solution and Visualisation
@@ -69,7 +67,7 @@ ens = solve(ens_prob,SSAStepper(), EnsembleThreads(), trajectories = 1e4, saveat
 ```
 ![oscillator3](../assets/oscillator3.svg)
 
-If we want to see how the mean of $Y$ varies with respect to the mean of $X$, we will find the following oscillatory orbit in the phase diagram.
+If we plot how the mean of $Y$ varies with respect to the mean of $X$, we will find the following oscillatory orbit in the phase diagram.
 
 ![oscillator4](../assets/oscillator4.gif)
 

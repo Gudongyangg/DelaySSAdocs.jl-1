@@ -45,7 +45,6 @@ rn = @reaction_network begin
     r, I --> R
 end ρ r
 u0 = [999,1,0,0] # S, I, E, R
-de_chan0 = [[]]
 tf = 400.
 tspan = (0,tf)
 ps = [1e-4, 1e-2]
@@ -55,11 +54,10 @@ ps = [1e-4, 1e-2]
 delay_trigger_affect! = function (integrator, rng)
     append!(integrator.de_chan[1], τ) # add a delay time τ to the first delay channel
 end
-# the first reaction S+I -> E+I will trigger a delay reaction: E --> I after τ time.  
-delay_trigger = Dict(1=>delay_trigger_affect!)  
-# E --> I after τ time: transfer from E (minus 1) to I (plus 1) after the completed delay reaction
-delay_complete = Dict(1=>[2=>1, 3=>-1]) 
-delay_interrupt = Dict()
+delay_trigger = Dict(1=>delay_trigger_affect!) # the first reaction S+I -> E+I will trigger a delay reaction: E --> I after τ time.  
+delay_complete = Dict(1=>[2=>1, 3=>-1]) # E --> I after τ time: transfer from E (minus 1) to I (plus 1) after the completed delay reaction
+delay_interrupt = Dict() 
+de_chan0 = [[]] # initial condition for delay channel: no on-going delay reactions
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 
 # convert the ReactionSystem to a JumpSystem
@@ -83,7 +81,6 @@ rxs = [Reaction(a*b^i/(1+b)^(i+1),nothing,[X],nothing,[i]) for i in 1:burst_sup]
 rxs = vcat(rxs)
 @named rs = ReactionSystem(rxs,t,[X],[a,b])
 u0 = [0]
-de_chan0 = [[]]
 tf = 200.
 tspan = (0,tf)
 ps = [0.0282, 3.46]
@@ -98,6 +95,7 @@ end
 delay_trigger = Dict([Pair(i, delay_trigger_affect![i]) for i in 1:burst_sup])
 delay_complete = Dict(1=>[1=>-1])
 delay_interrupt = Dict()
+de_chan0 = [[]]
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 
 # convert the ReactionSystem to a JumpSystem
@@ -113,7 +111,7 @@ ensprob = EnsembleProblem(djprob)
 ## Recommendations
 To solve a `DelayJumpProblem`, here are few recommendations for good performance:
 
-- Use Catalyst.jl to build your Markovian model (model without delays). For certain algorithms that need dependency graph, it will be auto-generated. Otherwise you must explicitly construct and pass these mappings in `JumpSet` (see [Jump Problems](https://diffeq.sciml.ai/stable/types/jump_types/#Jump-Problems) for details).
+- Use Catalyst.jl to build your Markovian model (model without delays). For certain algorithms that need dependency graph, it will be auto-generated. 
 
 - For a small number of jumps, `DelayRejection` and `DelayDirect` will often perform better than other aggregators.
 

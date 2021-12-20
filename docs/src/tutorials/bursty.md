@@ -21,7 +21,6 @@ We first convert the `ReactionSystem` to a `JumpSystem` and initialise the probl
 ```julia
 jumpsys = convert(JumpSystem, rs, combinatoric_ratelaws=false)
 u0 = [0]
-de_chan0 = [[]]
 tf = 200.
 tspan = (0,tf)
 timestamp = 0:1:tf
@@ -29,7 +28,7 @@ ps = [0.0282, 3.46]
 τ = 130.
 dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 ```
-where `de_chan0` is the initial condition for the delay channel where we assume no ongoing delay reactions at $t=0$. 
+
 
 ## Non-Markovian part
 Next, we define delay trigger funtion: for *n*th-reaction, $\emptyset \rightarrow nP$, the delay channel will be added of a vector $[\tau,\ldots,\tau]$ of size $n$.
@@ -56,9 +55,10 @@ delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
   
 We define the delay jump problem by 
 ```julia
+de_chan0 = [[]]
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
-where `DelayJumpProblem` inputs `JumpSystem`, `DelayJumpProblem`, `DelayJumpSet`, the algorithm and the initial condition of the delay channel `de_chan0`.
+where `de_chan0` is the initial condition for the delay channel where we assume no ongoing delay reactions at $t=0$. `DelayJumpProblem` inputs `JumpSystem`, `DelayJumpProblem`, `DelayJumpSet`, the algorithm and the initial condition of the delay channel `de_chan0`.
 ## Visualisation
 ```julia
 using DiffEqJump

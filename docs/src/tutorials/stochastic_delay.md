@@ -1,7 +1,7 @@
-# An example of stochastic delay 
+# A telegraph model of stochastic delay 
 
 ## Model
-According to [1], the model assumes that the gene can switch between active $G$ and inactive $G^*$ states, transcribes nascent mRNA (denoted by  $N$) while in the active state which subsequently is removed a time $\tau$ later. Here the delay $\tau$ can be a random variable. We can define the model
+According to [1], a telegraph gene expression model with stochastic delay assumes that the gene can switch between active $G$ and inactive $G^*$ states, transcribes nascent mRNA (denoted by  $N$) while in the active state which subsequently is removed a time $\tau$ later. Here the delay $\tau$ can be a random variable. We can define the model
 ```math
 G^*\xrightarrow{\sigma_{\text{on}}} G\\
 G\xrightarrow{\sigma_{\text{off}}}G^*\\
@@ -11,30 +11,26 @@ and $G\xrightarrow{\rho}G+N$ will trigger $N\Rightarrow \emptyset$ after $\tau$ 
 We set $\sigma_{\text{on}}=0.0282$, $\sigma_{\text{off}}=0.609$ and $\rho=2.11$.
 
 ### Markovian part
-
 We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) or [second part of Tutorials](tutorials.md) for details).
 
 ```julia
 using DiffEqJump, DelaySSAToolkit
 using Random, Distributions
-rate1 = [0.0282, 0.609, 2.11]
+rate = [0.0282, 0.609, 2.11]
 reactant_stoich = [[2=>1],[1=>1],[1=>1]]
 net_stoich = [[1=>1,2=>-1],[1=>-1,2=>1],[3=>1]]
-mass_jump = MassActionJump(rate1, reactant_stoich, net_stoich; scale_rates =false)
+mass_jump = MassActionJump(rate, reactant_stoich, net_stoich; scale_rates =false)
 jumpset = JumpSet((),(),nothing,mass_jump)
 ```
-
 Then we set the Initial value and define a `DiscreteProblem`.
-
 ```julia
 u0 = [1,0,0]
-de_chan0 = [[]]
 tf = 2000.
 tspan = (0,tf)
 dprob = DiscreteProblem(u0, tspan)
 ```
 ### Non-Markovian part
-Unlike other examples, the elongation time $\tau$ is a random variable sampled from two different lognormal distributions. We assume $\tau\sim \text{LogNormal}(0,2)+120$ and $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$. Here we take  $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$ for example.
+Unlike other examples, the elongation time $\tau$ is a random variable sampled from two different LogNormal distributions. We assume $\tau\sim \text{LogNormal}(0,2)+120$ and $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$. For instance, we take $\tau\sim \text{LogNormal}(1,\sqrt{2})+120$ and define 
 ```julia
 delay_trigger_affect! = function (integrator, rng)
     τ=rand(LogNormal(1,sqrt(2)))+120
@@ -45,22 +41,20 @@ delay_complete = Dict(1=>[3=>-1])
 delay_interrupt = Dict() 
 delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
-
-So we can define the problem
+Thus, we can define the problem
 ```julia
+de_chan0 = [[]]
 djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(false,false))
 ```
-
 ## Visualisation
-
-Then we simulate $10^5$ trajectories and calculate the probability distribution.
+We simulate $10^5$ trajectories and calculate the probability distribution.
 ```julia
 ensprob = EnsembleProblem(djprob)
 @time ens = solve(ensprob, SSAStepper(), EnsembleThreads(), trajectories=10^5)
 ```
 ![stochastic_delay1](../assets/stochastic_delay1.svg)
 
-If we change the stochastic delay to $\tau\sim \text{LogNormal}(0,2)+120$, we have the destruction of the zero mode.
+If we change the stochastic delay to $\tau\sim \text{LogNormal}(0,2)+120$, we can see the zero-inflated mode disappeared.
 ![stochastic_delay2](../assets/stochastic_delay2.svg)
 ## Reference
 

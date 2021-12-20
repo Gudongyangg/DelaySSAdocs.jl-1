@@ -28,14 +28,13 @@ where `combinatoric_ratelaws` is an optional parameter that specifies whether th
 With the initial conditions, we can then define `DiscreteProblem`
 ```julia
 u0 = [999,1,0,0] # S, I, E, R
-de_chan0 = [[]]
 tf = 400.
 tspan = (0,tf)
 ps = [1e-4, 1e-2] # parameters for ρ, r
 τ = 20.
 dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 ```
-where `DiscreteProblem` has inputs as the jump system `jumpsys`, the initial condition of reactants `u0`, the simulation timespan `tspan` and the reaction rates `ps`.
+where `DiscreteProblem` has inputs as the jump system `jumpsys`, the initial condition of reactants `u0`, the simulation timespan `tspan` and the reaction rates `ps`. 
 
 ### Non-Markovian part
 The non-Markovian part consists of three parts:
@@ -68,9 +67,12 @@ We refer to [Defining a `DelayJumpSet` (bursty model)](bursty.md/#Defining-a-Del
 
 Now we can define the `DelayJumpProblem` by 
 ```julia
+de_chan0 = [[]]
 djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true))
 ```
-where `DelayJumpProblem` inputs `jumpsys`,`DiscreteProblem`, `DelayJumpSet`, the algorithm and the initial condition of the delay channel `de_chan0`. The optional augment `save_positions` is a Boolean tuple for whether to save before and after the event.
+where `DelayJumpProblem` inputs `jumpsys`,`DiscreteProblem`, `DelayJumpSet`, the algorithm and the initial condition of the delay channel `de_chan0`. 
+Here `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose *k*th entry stores the schduled delay time for *k*th delay channel. Here the only delay channel is for exposed population and we assume $E(0) = 0$. 
+The optional keyword argument `save_positions` is a Boolean tuple for whether to save before and after the event.
 Then one can use 
 ```julia
 sol = solve(djprob, SSAStepper())
