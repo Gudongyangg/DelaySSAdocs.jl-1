@@ -4,7 +4,7 @@
 We study the following gene expression model which does not have an explicit gene state description
 and that the product (RNA or protein denoted as P) is actively transcribed in bursts whose size are distributed according to a geometric distribution. This means the propensity functions is given by $f(n) = ab^n/(1+b)^{n+1}$ for any positive integer $n$. The bursty model writes: 
 ```math
-\frac{ab^n}{(1+b)^{n+1}}: \emptyset \rightarrow nP \text{ triggers }nP\Rightarrow\emptyset \text{ after $\tau$ time}
+\frac{ab^n}{(1+b)^{n+1}}: \emptyset \rightarrow nP \text{ triggers }nP\Rightarrow\emptyset \text{ after $\tau$ time.}
 ```
 ## Markovian part
 The system has an explict solution which is obtained in [1, Supplementary Note Section 2]. We first construct reaction network
