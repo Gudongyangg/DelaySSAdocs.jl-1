@@ -1,11 +1,11 @@
 # [Tutorials](@id seir_model)
 
-This tutorial aims to explain how to use DelaySSAToolkit to define chemical reaction models, solve the problem and visualize the results. To demonstrate the functionalities, we will consider a specific case from epideimc modelling as follows
+This tutorial aims to explain how to use DelaySSAToolkit to define chemical reaction models, solve the problems and visualize the results. To demonstrate these functionalities, we will consider a specific case from epideimc modelling as follows
 ```math
 S+I\xrightarrow{\rho}E+I\\
 I\stackrel{r}{\rightarrow}R
 ```
-and $S+I\xrightarrow{\rho} E+I$ will trigger $E\Rightarrow I$ after $\tau$ time, where $S$, $E$, $I$ and $R$ are the susceptible, exposed, infected and removed populations.  It means, wtih rate $\rho$, a susceptible contacted by an infected will immediately become an individual that is exposed to the disease and then it takes certain amount of time delay $\tau$ to become an infected inidividual.
+and $S+I\xrightarrow{\rho} E+I$ will trigger $E\Rightarrow I$ after $\tau$ time, where $S$, $E$, $I$ and $R$ are the susceptible, exposed, infected and removed populations.  This means, wtih rate $\rho$, a susceptible contacted by an infected will immediately become an individual that is exposed to the disease and then it takes certain amount of time delay $\tau$ to become an infected inidividual.
 
 # Model
 For non-Markovian model, what differs from the Markovian model is the introduction of **delay reactions**. To show how we incorporate the delay reactions into the Markovian system, we first need to define the Markovian part and then its non-Markovian part. These two parts mainly form a `DelayJumpProblem`. Here we show two routes to define our delay system, one way is based on `JumpSystem`, `DiscreteProblem` and `DelayJumpSet`, the other is based on `JumpSet`, `DiscreteProblem` and `DelayJumpSet`.
