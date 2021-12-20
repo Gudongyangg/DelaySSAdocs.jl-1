@@ -22,42 +22,43 @@ This example is studied by Lafuerza and Toral in [1], where one can solve the so
 ```
 where $a = β + γ$.
 
-We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) for details or [tutorials second route](tutorials.md) for a guide on how to define a `JumpSet`).
 ## Markovian part
 ```julia
-C, γ, β, τ = [2., 0.1, 0.5, 15.]
-rate = [C,γ,β,γ]
-reactant_stoich = [[],[1=>1],[1=>1],[2=>1]]
-net_stoich = [[1=>1],[1=>-1],[1=>-1,2=>1],[2=>-1]]
-mass_jump = MassActionJump(rate, reactant_stoich, net_stoich; scale_rates =false)
-jumpset = JumpSet((),(),nothing,[mass_jump])
+using DiffEqJump, Catalyst, DelaySSAToolkit
+rn = @reaction_network begin
+   C, 0 --> Xₐ
+   γ, Xₐ --> 0
+   β, Xₐ --> Xᵢ
+   γ, Xᵢ --> 0
+end C γ β
+jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws = false)
 ```
-We refer to [this example](tutorials.md) for more details about the constuction of a `Jumpset`. Then we initialise the problem by setting
+We refer to [this example](tutorials.md) for more details about the constuction of a reaction network. Then we initialise the problem by setting
 ```julia
 u0 = [0, 0]
 tf = 30.
 saveat = .1
+C, γ, β = [2., 0.1, 0.5]
+p = [C, γ, β]
 tspan = (0.,tf)
-dprob = DiscreteProblem(u0, tspan)
+dprob = DiscreteProblem(u0, tspan, p)
 ```
-
 ## Non-Markovian part
-
 Then we turn to the definition of delay reactions
 
 ```julia
+τ = 15.
 delay_trigger_affect! = function (integrator, rng)
    append!(integrator.de_chan[1], τ)
 end
 delay_trigger = Dict(3=>delay_trigger_affect!)
 delay_complete = Dict(1=>[2=>-1]) 
-
-delay_affect! = function (de_chan, rng)
-    i = rand(rng, 1:length(de_chan[1]))
-    deleteat!(de_chan[1],i)
+delay_affect! = function (integrator, rng)
+    i = rand(rng, 1:length(integrator.de_chan[1]))
+    deleteat!(integrator.de_chan[1],i)
 end
 delay_interrupt = Dict(4=>delay_affect!) 
-delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
+delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
 
 - `delay_trigger`  
@@ -73,9 +74,9 @@ delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 Next, we choose a delay SSA algorithm and define the problem
 ```julia
 de_chan0 = [[]]
-djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
+djprob = DelayJumpProblem(jumpsys, dprob, aggregatoralgo,  delaysets, de_chan0, save_positions=(false,false))
 ```
-where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose `k`th entry stores the schduled delay time for `k`th delay channel. Here we assume $X_I(0) = 0$, thus only an empty array. `DelayJumpProblem` inputs `JumpProblem`, `DelayJumpSet` and the initial condition of the delay channel `de_chan0`.
+where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose `k`th entry stores the schduled delay time for `k`th delay channel. Here we assume $X_I(0) = 0$, thus only an empty array. 
 
 ## Visualisation
 Now we can solve the problem and plot a trajectory
@@ -109,8 +110,8 @@ We can also extend the model to multiple delay reactions, i.e. mutiple delay cha
 \begin{aligned}
 &\emptyset \xrightarrow{C} X_A\\
 &X_A \xrightarrow{\gamma} \emptyset\\
-&X_A \xrightarrow{\beta}  X_{I_1}+X_{I_2}, \text{ which triggers  } X_{I_1}, X_{I_2}&\Rightarrow \emptyset \text{ after delay } \tau\\
-&X_{I_1} \xrightarrow{\gamma} \emptyset
+&X_A \xrightarrow{\beta}  X_{I_1}+X_{I_2}, \text{ which triggers  } X_{I_1}, X_{I_2}\Rightarrow \emptyset \text{ after delay } \tau\\
+&X_{I_1} \xrightarrow{\gamma} \emptyset\\
 &X_{I_2} \xrightarrow{\gamma} \emptyset
 \end{aligned}
 ```
@@ -119,12 +120,14 @@ The 4th and 5th reactions will cause the delay channel to change its state durin
 Similarly, we define the problem as follows:
 ## Markovian part
 ```julia
-C, γ, β, τ = [2., 0.1, 0.5, 15.]
-rate1 = [C,γ,β,γ,γ]
-reactant_stoch = [[],[1=>1],[1=>1],[2=>1],[3=>1]]
-net_stoch = [[1=>1],[1=>-1],[1=>-1,2=>1,3=>1],[2=>-1],[3=>-1]]
-mass_jump = MassActionJump(rate1, reactant_stoch, net_stoch; scale_rates =false)
-jumpset = JumpSet((),(),nothing,[mass_jump])
+rn = @reaction_network begin
+   C, 0 --> Xₐ
+   γ, Xₐ --> 0
+   β, Xₐ --> Xᵢ₁ + Xᵢ₂
+   γ, Xᵢ₁ --> 0
+   γ, Xᵢ₂ --> 0
+end C γ β
+jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws = false)
 ```
 
 ```julia
@@ -133,10 +136,11 @@ tf = 30.
 saveat = .1
 de_chan0 = [[]]
 tspan = (0.,tf)
-dprob = DiscreteProblem(u0, tspan)
+dprob = DiscreteProblem(u0, tspan, p)
 ```
 ## Non-Markovian part
 ```julia
+τ = 15.
 delay_trigger_affect! = function (de_chan, rng)
    append!(de_chan[1], τ)
    append!(de_chan[2], τ)
@@ -157,7 +161,8 @@ delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
 
 ```julia
-djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true))
+de_chan0 = [[]]
+djprob = DelayJumpProblem(jumpsys, dprob, aggregatoralgo,  delaysets, de_chan0, save_positions=(false,false))
 ```
 ## Visualisation
 ```julia

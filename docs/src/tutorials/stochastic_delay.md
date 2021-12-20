@@ -3,28 +3,28 @@
 ## Model
 According to [1], a telegraph gene expression model with stochastic delay assumes that the gene can switch between active $G$ and inactive $G^*$ states, transcribes nascent mRNA (denoted by  $N$) while in the active state which subsequently is removed a time $\tau$ later. Here the delay $\tau$ can be a random variable. We can define the model
 ```math
-G^*\xrightarrow{\sigma_{\text{on}}} G\\
-G\xrightarrow{\sigma_{\text{off}}}G^*\\
+G^*\xrightarrow{k_{\text{on}}} G\\
+G\xrightarrow{k_{\text{off}}}G^*\\
 G\xrightarrow{\rho}G+N
 ```
 and $G\xrightarrow{\rho}G+N$ will trigger $N\Rightarrow \emptyset$ after $\tau$ time.
-We set $\sigma_{\text{on}}=0.0282$, $\sigma_{\text{off}}=0.609$ and $\rho=2.11$.
+We set $k_{\text{on}}=0.0282$, $k_{\text{off}}=0.609$ and $\rho=2.11$.
 
 ### Markovian part
-We first define the parameters and the mass-action jump (see [Defining a Mass Action Jump](https://diffeq.sciml.ai/stable/types/jump_types/#Defining-a-Mass-Action-Jump) or [second part of Tutorials](tutorials.md) for details).
-
+We first define the model using Catalyst (see [this example](tutorials.md) for more details about the constuction of a reaction network).
 ```julia
-using DiffEqJump, DelaySSAToolkit
+using DiffEqJump, Catalyst, DelaySSAToolkit
 using Random, Distributions
-rate = [0.0282, 0.609, 2.11]
-reactant_stoich = [[2=>1],[1=>1],[1=>1]]
-net_stoich = [[1=>1,2=>-1],[1=>-1,2=>1],[3=>1]]
-mass_jump = MassActionJump(rate, reactant_stoich, net_stoich; scale_rates =false)
-jumpset = JumpSet((),(),nothing,mass_jump)
+rn = @reaction_network begin
+    kon, Goff --> Gon
+    koff, Gon --> Goff
+    ρ, Gon --> Gon + N
+end kon koff ρ
+jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws = false)
 ```
 Then we set the Initial value and define a `DiscreteProblem`.
 ```julia
-u0 = [1,0,0]
+u0 = [1,0,0] # Gon, Goff, N
 tf = 2000.
 tspan = (0,tf)
 dprob = DiscreteProblem(u0, tspan)
@@ -44,7 +44,7 @@ delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 Thus, we can define the problem
 ```julia
 de_chan0 = [[]]
-djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(false,false))
+djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
 ## Visualisation
 We simulate $10^5$ trajectories and calculate the probability distribution.
