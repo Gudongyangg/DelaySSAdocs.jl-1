@@ -135,6 +135,6 @@ sol = solve(djprob, SSAStepper())
 
 
 ### [Remark](@id Remark) 
-!!! warning
+!!! note
     To check the order of the species in a reaction network `rn::ReactionSystem` (or a `jumpsys::JumpSystem`), one can call `species(rn)` (or `states(jumpsys)` respectively).
     Converting a `ReactionSystem` defined by Catalyst into a `JumpSystem` might change the order of the reactions that is in your orignal reaction network. Internally, all MassActionJumps are ordered before ConstantRateJumps (with the latter internally ordered in the same order they were passed in). The same principle applies for the construction of a `JumpSet`.  
