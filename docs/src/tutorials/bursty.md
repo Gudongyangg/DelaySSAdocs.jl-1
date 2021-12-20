@@ -1,7 +1,7 @@
 # [A bursty model with delay](@id bursty_model)
 
 ## Model
-We study the following model which does not have an explicit gene state description
+We study the following gene expression model which does not have an explicit gene state description
 and that the product (RNA or protein denoted as P) is actively transcribed in bursts whose size are distributed according to a geometric distribution. This means the propensity functions is given by $f(n) = ab^n/(1+b)^{n+1}$ for any positive integer $n$. The bursty model writes: 
 ```math
 \frac{ab^n}{(1+b)^{n+1}}: \emptyset \rightarrow nP \text{ triggers }nP\Rightarrow\emptyset \text{ after $\tau$ time}
@@ -40,20 +40,19 @@ for n in 1:burst_sup
     append!(integrator.de_chan[1], fill(τ, n))
     end)
 end
-delay_trigger_affect!
 delay_trigger = Dict([Pair(i, delay_trigger_affect![i]) for i in 1:burst_sup])
 delay_complete = Dict(1=>[1=>-1])
 delay_interrupt = Dict()
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 ```
 - `delay_trigger  `
-  - Keys: Indices of reactions defined in `jumpset` that can trigger the delay reaction. Here we have `burst_sup = 30` reactions $ab^n/(1+b)^{n+1}:\emptyset \rightarrow nP$, that will trigger $nP$ to degrade after time $\tau$.
-  - Values: A update function that determines how to update the delay channel. In this example, once the delay reaction is trigged, the delay channel (which is the channel for $P$) will be added an array of delay time $\tau$ depending on the bursting number $n$.
+  - Keys: Indices of reactions defined in `jumpset` that can trigger the delay reaction.  For each $n= 1,\ldots,30,$ the reaction $ab^n/(1+b)^{n+1}:\emptyset \rightarrow nP$, that will trigger $nP$ to degrade after time $\tau$.
+  - Values: An update function that determines how to update the delay channel. In this example, once the delay reaction is trigged, the delay channel (which is the channel for $P$) will be added an array of delay time $\tau$ depending on the bursting number $n$.
 - `delay_interrupt` 
   - There are no delay interrupt reactions in this example so we set `delay_interrupt = Dict()`.
 - `delay_complete` 
   - Keys: Indices of delay channel. Here we only have one delay channel for $P$.
-  - Values: A vector of `Pair`s, mapping species id to net change of stoichiometric coefficient.
+  - Values: A vector of `Pair`s, mapping species index to net change of stoichiometric coefficient. Here the degradation will cause the first species to have a net change of $-1$. In this example, one might have $nP$ leaving the system simultaneously. Such multiple delay reactions are taken care of automatically by the delay SSA algorithm.
   
 We define the delay jump problem by 
 ```julia
