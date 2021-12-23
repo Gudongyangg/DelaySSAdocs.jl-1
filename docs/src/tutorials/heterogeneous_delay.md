@@ -86,5 +86,5 @@ Here we plot the histogram of the number of unfinished reactant $X$s in the dela
 
 ![heterogeneous2](../assets/heterogeneous_delay2.svg)
 
-## Reference
+## References
 [1] Mark Jayson Cortez, Hyukpyo Hong, Boseung Choi, Jae Kyoung Kim, Krešimir Josić, "Hierarchical Bayesian models of transcriptional and translational regulation processes with delays", Bioinformatics, 2021;, btab618, [https://doi.org/10.1093/bioinformatics/btab618](https://doi.org/10.1093/bioinformatics/btab618)

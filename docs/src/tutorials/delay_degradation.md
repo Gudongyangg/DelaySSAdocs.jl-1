@@ -173,5 +173,5 @@ ens =@time solve(ens_prob,SSAStepper(),EnsembleThreads(),trajectories = 10^4, sa
 
 
 
-## Reference
+## References
 [1] Lafuerza, Luis F., and Raul Toral. "Exact solution of a stochastic protein dynamics model with delayed degradation." Physical Review E 84, no. 5 (2011): 051121. [https://doi.org/10.1103/PhysRevE.84.051121](https://doi.org/10.1103/PhysRevE.84.051121)
