@@ -41,6 +41,7 @@ delay_complete = Dict(1=>[3=>-1])
 delay_interrupt = Dict() 
 delayjumpset = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
+To see how to define the `DelayJumpSet`, we refers to [this example](tutorials.md).
 Thus, we can define the problem
 ```julia
 de_chan0 = [[]]

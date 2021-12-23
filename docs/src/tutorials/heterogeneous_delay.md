@@ -37,7 +37,7 @@ de_chan0 = [[]]
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 jprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(false,false))
 ```
-Here the value of `delay_trigger` is `[1=>τ]`. This is of `Pair` type where the first index refers to the number of delay channel, the second index refers to the delay time. Such a definition is equivalent to appending a delay time $\tau$ to the first delay channel provided that the first reaction $A_n: 0\rightarrow X$ happened. `de_chan0` is the initial condition for delay channels where we assume no on-going delay reactions.
+Here the value of `delay_trigger` is `[1=>τ]`. This is of `Pair` type where the first index refers to the number of delay channel, the second index refers to the delay time. Such a definition is equivalent to appending a delay time $\tau$ to the first delay channel provided that the first reaction $A_n: 0\rightarrow X$ happened. `de_chan0` is the initial condition for delay channels, here we assume no on-going delay reactions.
 
 ## Heterogeneous fixed delays
 ### Define `EnsembleProblem` 

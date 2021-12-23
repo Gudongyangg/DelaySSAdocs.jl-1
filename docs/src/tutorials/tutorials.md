@@ -23,7 +23,7 @@ We can easily obtain a `Jumpsystem` from the reaction network `rn`.
 ```julia
 jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws=false)
 ```
-where `combinatoric_ratelaws` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie [1]. By default, the rates are rescaled. This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function would be $kA(A-1)/2!$. To **avoid** having the reaction rates rescaled (by $1/2$ for these two examples), one can pass the constructor the optional named parameter `combinatoric_ratelaws=false` (see [reaction rate laws used in simulations](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/#Reaction-rate-laws-used-in-simulations) for details).
+where `combinatoric_ratelaws` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie [1]. By default, the rates are rescaled. This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function would be $kA(A-1)/2!$. To **avoid** having the reaction rates rescaled (by $1/2$ for this example), one can pass the constructor the optional named parameter `combinatoric_ratelaws=false` (see [reaction rate laws used in simulations](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/#Reaction-rate-laws-used-in-simulations) for details).
 
 With the initial conditions, we can then define `DiscreteProblem`
 ```julia

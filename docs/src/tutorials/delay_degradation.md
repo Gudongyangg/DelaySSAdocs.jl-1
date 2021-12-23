@@ -65,8 +65,8 @@ delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
   - Keys: Indices of reactions defined in Markovian part that can trigger the delay reaction. Here we have the 3rd reaction $\beta: X_A \rightarrow X_I$ that will trigger the degradation of $X_I$ after time $\tau$.
   - Values: A update function that determines how to update the delay channel. In this example, once the delay reaction is triggered, the first delay channel (which is the channel for $X_I$) will be added to a delay time $\tau$.			
 - `delay_interrupt`
-  - Keys: Indices of reactions defined in Markovian part that can cause the change in the delay channels. In this example, the 4th reaction $\gamma : X_I \rightarrow \emptyset$ will change the schduled delay reaction to change its state immediately.
-  - Values: A update function that determines how to update the delay channel. In this example, once a `delay_interrupt` reaction happens, one randomly picked reactant $X_I$ that is supposed to leave the system after time $\tau$ is degraded immediately.  
+  - Keys: Indices of reactions defined in Markovian part that can cause the change in the delay channels. In this example, the 4th reaction $\gamma : X_I \rightarrow \emptyset$ will change the schduled delay reaction channel immediately.
+  - Values: A update function that determines how to update the delay channel. In this example, once a `delay_interrupt` reaction happens, one randomly picked reactant $X_I$ (supposed to leave the system after time $\tau$) is degraded immediately.  
 - `delay_complete` 
   - Keys: Indices of delay channels. Here the first delay channel corresponds to $X_I$.
   - Values: A vector of `Pair`s, mapping species index to net change of stoichiometric coefficient. Here the second species $X_I$ has a net change of $-1$ upon delay completion.
@@ -76,7 +76,7 @@ Next, we choose a delay SSA algorithm and define the problem
 de_chan0 = [[]]
 djprob = DelayJumpProblem(jumpsys, dprob, aggregatoralgo,  delaysets, de_chan0, save_positions=(false,false))
 ```
-where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose `k`th entry stores the schduled delay time for `k`th delay channel. Here we assume $X_I(0) = 0$, thus only an empty array. 
+where `de_chan0` is the initial condition for the delay channel, which is a vector of arrays whose *k*th entry stores the schduled delay time for *k*th delay channel. Here we assume $X_I(0) = 0$, thus only an empty array. 
 
 ## Visualisation
 Now we can solve the problem and plot a trajectory

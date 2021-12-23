@@ -17,7 +17,7 @@ rxs = vcat(rxs)
 @named rs = ReactionSystem(rxs,t,[X],[a,b])
 ```
 In the example, we set $a=0.0282$ and $b=3.46$ and set the upper bound of bursting as `burst_sup = 30`. This means we ignore all the reactions $ab^n/(1+b)^{n+1}:\emptyset \rightarrow nP$ for any $n > 30$ where the reaction rate $ab^n/(1+b)^{n+1} \sim 10^{-6}$. 
-We first convert the `ReactionSystem` to a `JumpSystem` and initialise the problem by setting
+We first convert the `ReactionSystem` to a `JumpSystem` and initialise the discrete problem by
 ```julia
 jumpsys = convert(JumpSystem, rs, combinatoric_ratelaws=false)
 u0 = [0]
@@ -29,9 +29,8 @@ ps = [0.0282, 3.46]
 dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 ```
 
-
 ## Non-Markovian part
-Next, we define delay trigger funtion: for *n*th-reaction, $\emptyset \rightarrow nP$, the delay channel will be added of a vector $[\tau,\ldots,\tau]$ of size $n$.
+Next, we define the non-Markovian part. Here we mainly need to consider the delay trigger reactions that is, for *n*th-reaction, $\emptyset \rightarrow nP$, the delay channel will be added of a vector $[\tau,\ldots,\tau]$ of size $n$. Thus, we have
 ```julia
 delay_trigger_affect! = []
 for n in 1:burst_sup
@@ -40,8 +39,8 @@ for n in 1:burst_sup
     end)
 end
 delay_trigger = Dict([Pair(i, delay_trigger_affect![i]) for i in 1:burst_sup])
-delay_complete = Dict(1=>[1=>-1])
 delay_interrupt = Dict()
+delay_complete = Dict(1=>[1=>-1])
 delayjumpset = DelayJumpSet(delay_trigger, delay_complete, delay_interrupt)
 ```
 - `delay_trigger  `
