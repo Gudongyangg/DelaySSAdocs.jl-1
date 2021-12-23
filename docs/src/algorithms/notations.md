@@ -25,7 +25,7 @@ Because the assumption above only pertains to the initiation times of reactions 
 
 
 
-## Reference
+## References
 [1] Dmitri A. Bratsun, Dmitri N. Volfson, Jeff Hasty, and Lev S. Tsimring "Non-Markovian processes in gene regulation (Keynote Address)", Proc. SPIE 5845, Noise in Complex Systems and Stochastic Dynamics III, (23 May 2005).
 [https://doi.org/10.1117/12.609707](https://doi.org/10.1117/12.609707)
 
