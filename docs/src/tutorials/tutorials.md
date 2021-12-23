@@ -23,7 +23,7 @@ We can easily obtain a `Jumpsystem` from the reaction network `rn`.
 ```julia
 jumpsys = convert(JumpSystem, rn, combinatoric_ratelaws=false)
 ```
-where `combinatoric_ratelaws` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie, and hence need to be rescaled. The default, `combinatoric_ratelaws=true`, corresponds to rescaling the passed in rate constants. The default behavior is to assume rate constants correspond to stochastic rate constants in the sense used by Gillespie [1]. This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function constructed by `MassActionJump` would be `k*A*(A-1)/2!`. For a trimolecular reaction like $3A \overset{k}{\rightarrow} B$ the rate function would be `k*A*(A-1)*(A-2)/3!`. To *avoid* having the reaction rates rescaled (by `1/2` and `1/6` for these two examples), one can pass the `JumpSystem` constructor the optional named parameter `combinatoric_ratelaws=false` see [reaction rate laws used in simulations](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/#Reaction-rate-laws-used-in-simulations) for details.
+where `combinatoric_ratelaws` is an optional parameter that specifies whether the rate constants correspond to stochastic rate constants in the sense used by Gillespie [1]. By default, the rates are rescaled. This means that for a reaction such as $2A \overset{k}{\rightarrow} B$, the jump rate function would be `k*A*(A-1)/2!`. For a trimolecular reaction like $3A \overset{k}{\rightarrow} B$ the rate function would be `k*A*(A-1)*(A-2)/3!`. To *avoid* having the reaction rates rescaled (by `1/2` and `1/6` for these two examples), one can pass the constructor the optional named parameter `combinatoric_ratelaws=false` (see [reaction rate laws used in simulations](https://catalyst.sciml.ai/stable/tutorials/using_catalyst/#Reaction-rate-laws-used-in-simulations) for details).
 
 With the initial conditions, we can then define `DiscreteProblem`
 ```julia
@@ -37,7 +37,7 @@ dprob = DiscreteProblem(jumpsys,u0,tspan,ps)
 where `DiscreteProblem` has inputs as the jump system `jumpsys`, the initial condition of reactants `u0`, the simulation timespan `tspan` and the reaction rates `ps`. 
 
 ### Non-Markovian part
-The non-Markovian part consists of three parts:
+The non-Markovian part mainly consists of three parts:
 - delay trigger reactions: those reactions in the [Markovian part](@ref Markovian_part) that trigger the change of the delay channels or/and the state of the reactants upon initiation.
 - delay interrupt reactions: those reactions in the [Markovian part](@ref Markovian_part) that change the delay channels or/and the state of the reactants in the middle of on-going delay reactions.
 - delay complete reactions: those reactions that are initiated by delay trigger reactions and change the delay channels or/and the state of the reactants upon completion.
