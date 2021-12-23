@@ -41,9 +41,9 @@ Define *Tstruct*, whose $i$th $(i=1,\dots,d)$ row stores $T_i$ and the index, $\
 11. Set $t=t+\Delta$.
 12. Return to Step 2 or quit.
 
-Remark. Notice that in the above pseudo-code, we modified the Step 4. in the orignal algorithm but both are equivalent.
+Remark. Notice that in the above pseudo-code, we modified the Step 4 in the orignal algorithm for computational efficiency but both are equivalent.
 
-## Reference
+## References
 
 [1] Xiaodong Cai, "Exact stochastic simulation of coupled chemical reactions with delays", The Journal of Chemical Physics 126, 124108(2007).
 [https://doi/10.1063/1.2710253](https://aip.scitation.org/doi/10.1063/1.2710253)
