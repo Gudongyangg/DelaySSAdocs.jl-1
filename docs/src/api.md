@@ -1,7 +1,12 @@
 # Main API
-```@index
+```@meta
+CurrentModule = DelaySSAdocs
 ```
 
-```@autodocs
-Modules = [DelaySSAToolkit]
+```@docs
+@DelayJumpProblem
+```
+
+```@docs
+@delay_trigger
 ```
