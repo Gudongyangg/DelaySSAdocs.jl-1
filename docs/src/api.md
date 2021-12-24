@@ -4,8 +4,8 @@ CurrentModule = DelaySSAdocs
 ```
 
 ```@docs
-DelayJumpProblem
 DelayJumpSet
+DelayJumpProblem
 ```
 
 ## More about defining a `DelayJumpSet`
