@@ -46,7 +46,7 @@ DelayJumpSet(delay_trigger,delay_complete,delay_interrupt) = DelayJumpSet(delay_
 
 
 """
-    function DelayJumpProblem(prob, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpsets::DelayJumpSet, de_chan0)
+    function DelayJumpProblem(prob::DiscreteProblem, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpsets::DelayJumpSet, de_chan0)
 
 - `jumps::JumpSet`
         
@@ -136,11 +136,12 @@ function DelayJumpProblem(js, prob, aggregator, delayjumpset, de_chan0; kwargs..
 end
 
 """
-delay_trigger defines a `Dict` type:
+    delay_trigger defines a `Dict` type:
+
 - Keys: Indices of reactions defined in the Markovian part that can trigger the delay reaction;
 - Values: An update function or a `Pair` type that determines how to update the delay channel.
 
-Notes
+# Notes
 - 
 """
 function delay_trigger end
