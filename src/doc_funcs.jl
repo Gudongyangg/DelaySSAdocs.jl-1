@@ -1,4 +1,12 @@
 """
+$(TYPEDEF)
+
+A delay jump set...
+
+# Fields
+$(FIELDS)
+
+# Notes
 -`delay_trigger::Dict{Int,Any}`     #  those reactions in the Markovian part that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation. Keys: Indices of reactions defined in the Markovian part that can trigger the delay reactions; Values: Update functions(or `Pair` type) that decide how to update the delay channel or the state of the reactants.
 
 -`delay_interrupt::Dict{Int,Any}`   # those reactions in the Markovian part that change the state of the delay channels or/and the state of the reactants in the middle of on-going delay reactions. Keys: Indices of reactions defined in the Markovian part that can interrupt the delay reactions; Values: Update functions(or `Pair` type) that decide how to update the delay channel or the state of the reactants.
@@ -10,10 +18,15 @@
 -`delay_interrupt_set::Vector{Int}` # collect(keys(delay_interrupt))
 """
 mutable struct DelayJumpSet
+    """those reactions in the Markovian part that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation."""
     delay_trigger::Dict{Int,Any}
+    """those reactions in the Markovian part that change the state of the delay channels or/and the state of the reactants in the middle of on-going delay reactions."""
     delay_complete::Dict{Int,Any}
+    """those reactions that are initiated by delay trigger reactions and change the state of the delay channels or/and the state of the reactants upon completion."""
     delay_interrupt::Dict{Int,Any}
+    """collect(keys(delay_trigger))"""
     delay_trigger_set::Vector{Int}
+    """collect(keys(delay_interrupt))"""
     delay_interrupt_set::Vector{Int}
 end
 
@@ -34,9 +47,11 @@ DelayJumpSet(delay_trigger,delay_complete,delay_interrupt) = DelayJumpSet(delay_
 
 """
     function DelayJumpProblem(prob, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpsets::DelayJumpSet, de_chan0)
+
+- `jumps::JumpSet`
         
 """
-function DelayJumpProblem(prob, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpsets::DelayJumpSet, de_chan0;
+function DelayJumpProblem(prob, aggregator, jumps, delayjumpsets::DelayJumpSet, de_chan0;
                      save_positions = typeof(prob) <: DiffEqBase.AbstractDiscreteProblem ? (false,true) : (true,true),
                      rng = Xorshifts.Xoroshiro128Star(rand(UInt64)), scale_rates = true, useiszero = true, spatial_system=nothing, hopping_constants=nothing, kwargs...)
 
@@ -86,9 +101,14 @@ function DelayJumpProblem(prob, aggregator::AbstractDelayAggregatorAlgorithm, ju
 end
 
 """
-TODO
+    function DelayJumpProblem(js::JumpSystem, prob, aggregator, delayjumpset, de_chan0; kwargs...)
+
+#Arguments
+- `js::JumpSystem`: ...
+- `prob::DiscreteProblem`: ...
+- `aggregator::` ...
 """
-function DelayJumpProblem(js::JumpSystem, prob, aggregator, delayjumpset, de_chan0; kwargs...)
+function DelayJumpProblem(js, prob, aggregator, delayjumpset, de_chan0; kwargs...)
     statetoid = Dict(value(state) => i for (i,state) in enumerate(states(js)))
     eqs       = equations(js)
     invttype  = prob.tspan[1] === nothing ? Float64 : typeof(1 / prob.tspan[2])

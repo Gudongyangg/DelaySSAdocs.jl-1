@@ -1,3 +1,5 @@
+abstract type AbstractDelayAggregatorAlgorithm  end
+
 struct DelayRejection <: AbstractDelayAggregatorAlgorithm end
 struct DelayDirect <: AbstractDelayAggregatorAlgorithm end
 struct DelayDirectCR <: AbstractDelayAggregatorAlgorithm end
