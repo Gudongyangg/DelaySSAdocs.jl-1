@@ -18,5 +18,14 @@ Further notes on `delay_trigger`, `delay_interrupt`, `delay_complete`.
  
 
 ### `delay_interrupt`
- 
+
 ### `delay_complete` 
+
+
+```@docs
+AbstractDelayAggregatorAlgorithm
+DelayDirect
+DelayRejection
+DelayMNRM
+DelayDirectCR
+```
