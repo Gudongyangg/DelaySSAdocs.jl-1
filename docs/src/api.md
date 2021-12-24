@@ -4,10 +4,10 @@ CurrentModule = DelaySSAdocs
 ```
 
 ```@docs
-@DelayJumpProblem
-@DelayJumpSet
+DelayJumpProblem
+DelayJumpSet
 ```
 
 ```@docs
-@delay_trigger
+delay_trigger
 ```
