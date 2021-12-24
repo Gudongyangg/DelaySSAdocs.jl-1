@@ -1,6 +1,6 @@
 module DelaySSAdocs
 
-using DiffEqBase, DocStringExtensions
+using DocStringExtensions
 # Write your package code here.
 include("doc_funcs.jl")
 include("aggregators.jl")

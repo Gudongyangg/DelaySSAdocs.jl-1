@@ -52,7 +52,7 @@ DelayJumpSet(delay_trigger,delay_complete,delay_interrupt) = DelayJumpSet(delay_
         
 """
 function DelayJumpProblem(prob, aggregator, jumps, delayjumpsets::DelayJumpSet, de_chan0;
-                     save_positions = typeof(prob) <: DiffEqBase.AbstractDiscreteProblem ? (false,true) : (true,true),
+                     save_positions = (true,true),
                      rng = Xorshifts.Xoroshiro128Star(rand(UInt64)), scale_rates = true, useiszero = true, spatial_system=nothing, hopping_constants=nothing, kwargs...)
 
   # initialize the MassActionJump rate constants with the user parameters
