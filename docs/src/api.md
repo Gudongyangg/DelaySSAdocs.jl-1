@@ -8,7 +8,7 @@ DelayJumpProblem
 DelayJumpSet
 ```
 
-## Define `DelayJumpSet`
+## More about defining a `DelayJumpSet`
 Further notes on `delay_trigger`, `delay_interrupt`, `delay_complete`.
 ### `delay_trigger` 
    delay_trigger defines a `Dict` type:
@@ -21,7 +21,7 @@ Further notes on `delay_trigger`, `delay_interrupt`, `delay_complete`.
 
 ### `delay_complete` 
 
-
+## Types and Algorithms
 ```@docs
 AbstractDelayAggregatorAlgorithm
 DelayDirect
