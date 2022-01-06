@@ -53,9 +53,9 @@ mutable struct DelayJumpSet
     delay_complete::Dict{Int,Any}
     """those reactions that are initiated by delay trigger reactions and change the state of the delay channels or/and the state of the reactants upon completion."""
     delay_interrupt::Dict{Int,Any}
-    """keys of `delay_trigger`"""
+    """keys of `delay_trigger`."""
     delay_trigger_set::Vector{Int}
-    """keys of `delay_interrupt`"""
+    """keys of `delay_interrupt`."""
     delay_interrupt_set::Vector{Int}    
 end
 
@@ -68,14 +68,19 @@ DelayJumpSet(delay_trigger,delay_complete,delay_interrupt) = DelayJumpSet(delay_
     function DelayJumpProblem(prob::DiscreteProblem, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpsets::DelayJumpSet, de_chan0)
 # Fields
 - `prob::DiscreteProblem`
+
     A problem defined by some initial values in Markovian part.
 - `aggregator::AbstractDelayAggregatorAlgorithm`
+
     The algorithm chose to solve the DelaySSA problem.
 - `jumps::JumpSet`
+
     A jump set containing the information of Markovian part.
 - `delayjumpsets::DelayJumpSet`
+
     A jump set containing the information of Non-Markovian part.
 - `de_chan0::Vector{Vector{T}}` 
+
     Initial condition of the delay channel.
 ```julia
 djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true)).
@@ -133,7 +138,9 @@ end
 """
     function DelayJumpProblem(js::JumpSystem, prob, aggregator, delayjumpset, de_chan0; kwargs...)
 # Fields
-- `js::JumpSystem`    A jump system containing the information of Markovian part
+- `js::JumpSystem`    
+
+    A jump system containing the information of Markovian part
 - `prob::DiscreteProblem`
 - `aggregator::AbstractDelayAggregatorAlgorithm`
 - `delayjumpsets::DelayJumpSet`
