@@ -1,7 +1,7 @@
 """
 $(TYPEDEF)
 
-A delay jump set that consists of five inputs at most, namely delay_trigger, delay_interrupt, delay_complete, delay_trigger_set and delay_interrupt_set.
+A delay jump set that consists of five inputs at most, namely `delay_trigger`, `delay_interrupt`, `delay_complete`, `delay_trigger_set` and `delay_interrupt_set`.
 
 # Fields
 $(FIELDS)
@@ -19,9 +19,32 @@ $(FIELDS)
     - Keys: Indices of the delay channel; 
     - Values: Update functions(or `Pair` type) that decide how to update the delay channel or the state of the reactants.
 
-- `delay_trigger_set::Vector{Int}`:  collect(keys(delay_trigger))
+- `delay_trigger_set::Vector{Int}`:  indices of reactions that can trigger the delay reaction.
 
-- `delay_interrupt_set::Vector{Int}`:  collect(keys(delay_interrupt))
+- `delay_interrupt_set::Vector{Int}`:  indices of reactions that can cause the change in the delay channels.
+
+We take this [model](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/delay_degradation/) for example.
+```julia
+delay_trigger_affect! = function (integrator, rng)
+  append!(integrator.de_chan[1], τ)
+end
+
+# the 3rd reaction will trigger the delay reaction
+delay_trigger = Dict(3=>delay_trigger_affect!)
+
+# the 1st delay reaction will cause the 2nd species of molecule to degrede
+delay_complete = Dict(1=>[2=>-1]) 
+delay_affect! = function (integrator, rng)
+   i = rand(rng, 1:length(integrator.de_chan[1]))
+   deleteat!(integrator.de_chan[1],i)
+end
+
+# the 4th reaction will change the schduled delay reaction channel
+delay_interrupt = Dict(4=>delay_affect!) 
+delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
+```
+
+
 """
 mutable struct DelayJumpSet
     """those reactions in the Markovian part that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation."""
@@ -30,9 +53,9 @@ mutable struct DelayJumpSet
     delay_complete::Dict{Int,Any}
     """those reactions that are initiated by delay trigger reactions and change the state of the delay channels or/and the state of the reactants upon completion."""
     delay_interrupt::Dict{Int,Any}
-    """collect(keys(delay_trigger))"""
+    """keys of `delay_trigger`"""
     delay_trigger_set::Vector{Int}
-    """collect(keys(delay_interrupt))"""
+    """keys of `delay_interrupt`"""
     delay_interrupt_set::Vector{Int}    
 end
 
@@ -45,11 +68,18 @@ DelayJumpSet(delay_trigger,delay_complete,delay_interrupt) = DelayJumpSet(delay_
     function DelayJumpProblem(prob::DiscreteProblem, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpsets::DelayJumpSet, de_chan0)
 # Fields
 - `prob::DiscreteProblem`
+    A problem defined by some initial values in Markovian part.
 - `aggregator::AbstractDelayAggregatorAlgorithm`
+    The algorithm chose to solve the DelaySSA problem.
 - `jumps::JumpSet`
+    A jump set containing the information of Markovian part.
 - `delayjumpsets::DelayJumpSet`
+    A jump set containing the information of Non-Markovian part.
 - `de_chan0::Vector{Vector{T}}` 
-        
+    Initial condition of the delay channel.
+```julia
+djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true)).
+```
 """
 function DelayJumpProblem(prob, aggregator, jumps, delayjumpsets::DelayJumpSet, de_chan0;
                      save_positions = (true,true),
@@ -103,11 +133,14 @@ end
 """
     function DelayJumpProblem(js::JumpSystem, prob, aggregator, delayjumpset, de_chan0; kwargs...)
 # Fields
-- `js::JumpSystem`: ...
-- `prob::DiscreteProblem`: ...
+- `js::JumpSystem`    A jump system containing the information of Markovian part
+- `prob::DiscreteProblem`
 - `aggregator::AbstractDelayAggregatorAlgorithm`
 - `delayjumpsets::DelayJumpSet`
 - `de_chan0::Vector{Vector{T}}` 
+```julia
+djprob = DelayJumpProblem(jumpsys, dprob, DelayRejection(), delayjumpset, de_chan0, save_positions=(true,true))
+```
 """
 function DelayJumpProblem(js, prob, aggregator, delayjumpset, de_chan0; kwargs...)
     statetoid = Dict(value(state) => i for (i,state) in enumerate(states(js)))
