@@ -1,7 +1,7 @@
 """
 $(TYPEDEF)
 
-A delay jump set...
+A delay jump set that consists of five inputs at most, namely delay_trigger, delay_interrupt, delay_complete, delay_trigger_set and delay_interrupt_set.
 
 # Fields
 $(FIELDS)
