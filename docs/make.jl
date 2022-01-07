@@ -20,7 +20,6 @@ makedocs(;
             "tutorials/tutorials.md", 
             "tutorials/bursty.md",
             "tutorials/delay_degradation.md",
-            # "tutorials/delay_multidegradation.md",
             "tutorials/heterogeneous_delay.md",
             "tutorials/delay_oscillator.md",
             "tutorials/stochastic_delay.md",
