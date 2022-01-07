@@ -21,7 +21,7 @@ $(FIELDS)
 
 - `delay_trigger_set::Vector{Int}`:  indices of reactions that can trigger the delay reaction.
 
-- `delay_interrupt_set::Vector{Int}`:  indices of reactions that can cause the change in the delay channels.
+- `delay_interrupt_set::Vector{Int}`:  indices of reactions that can interrupt the delay reactions.
 
 We take this [model](https://palmtree2013.github.io/DelaySSAdocs.jl/dev/tutorials/delay_degradation/) for example.
 ```julia
@@ -32,14 +32,14 @@ end
 # the 3rd reaction will trigger the delay reaction
 delay_trigger = Dict(3=>delay_trigger_affect!)
 
-# the 1st delay reaction will cause the 2nd species of molecule to degrede
+# the 1st delay reaction will cause the 2nd species of molecule to degrade
 delay_complete = Dict(1=>[2=>-1]) 
 delay_affect! = function (integrator, rng)
    i = rand(rng, 1:length(integrator.de_chan[1]))
    deleteat!(integrator.de_chan[1],i)
 end
 
-# the 4th reaction will change the schduled delay reaction channel
+# the 4th reaction will interrupt the delay reactions
 delay_interrupt = Dict(4=>delay_affect!) 
 delaysets = DelayJumpSet(delay_trigger,delay_complete,delay_interrupt)
 ```
@@ -81,7 +81,7 @@ DelayJumpSet(delay_trigger,delay_complete,delay_interrupt) = DelayJumpSet(delay_
     A jump set containing the information of Non-Markovian part.
 - `de_chan0::Vector{Vector{T}}` 
 
-    Initial condition of the delay channel.
+    Initial condition of the delay channel and `T::Float64`.
 ```julia
 djprob = DelayJumpProblem(dprob, DelayRejection(), jumpset, delayjumpset, de_chan0, save_positions=(true,true)).
 ```
@@ -140,7 +140,7 @@ end
 # Fields
 - `js::JumpSystem`    
 
-    A jump system containing the information of Markovian part
+    A jump system containing the information of Markovian part.
 - `prob::DiscreteProblem`
 - `aggregator::AbstractDelayAggregatorAlgorithm`
 - `delayjumpsets::DelayJumpSet`
