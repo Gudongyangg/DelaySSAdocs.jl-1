@@ -10,21 +10,22 @@ $(FIELDS)
 - `delay_trigger::Dict{Int,T}`: reactions in the Markovian part that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation.
     - Keys: Indices of reactions defined in the Markovian part that can trigger the delay reactions; 
     - Values: value type `T` can be either 
-      1. `Function`: a function that decides how to update the delay channel and/or the state of the reactants.
-      For example, one can define
-      ```julia
-      delay_trigger_affect! = function(integrator, rng)
-          append!(integrator.de_chan[1], rand(rng))
-          integrator.u[2] +=1
-      end
-      ``` 
-      which means adding a random number (with a given random seed `rng`) in (0,1) to the first delay channel, and adding 1 individual to the second species.
-      2. `Pair` a pair type is a simplified update function for only changing the delay channel (which will render better performance). For example, setting `delay_trigger_affect! = [1=>τ]` is equivalent to 
-      ```julia
-      delay_trigger_affect! = function(integrator, rng)
-          append!(integrator.de_chan[1], τ)
-      end
-      ```
+      - `Function`: 
+        a function that decides how to    update the delay channel and/or the state of the reactants. For example, one can define
+        ```julia
+        delay_trigger_affect! = function(integrator, rng)
+            append!(integrator.de_chan[1], rand(rng))
+            integrator.u[2] +=1
+        end
+        ``` 
+        which means adding a random number (with a given random seed `rng`) in (0,1) to the first delay channel, and adding 1 individual to the second species.
+      - `Pair` 
+        a pair type is a simplified update function for only changing the delay channel (which will render better performance). For example, setting `delay_trigger_affect! = [1=>τ]` is equivalent to 
+        ```julia
+        delay_trigger_affect! = function(integrator, rng)
+            append!(integrator.de_chan[1], τ)
+        end
+        ```
 - `delay_interrupt::Dict{Int,T}`: reactions in the Markovian part that change the state of the delay channels or/and the state of the reactants in the middle of on-going delay reactions. 
     - Keys: Indices of reactions defined in the Markovian part that can interrupt the delay reactions; 
     - Values: value type `T` can be either an update functions of `Function` type or a `Pair` type that decides how to update the delay channel or the state of the reactants.
