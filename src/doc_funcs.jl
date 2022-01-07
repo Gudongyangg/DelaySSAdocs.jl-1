@@ -10,7 +10,7 @@ $(FIELDS)
 - `delay_trigger::Dict{Int,T}`: reactions in the Markovian part that trigger the change of the state of the delay channels or/and the state of the reactants upon initiation.
     - Keys: Indices of reactions defined in the Markovian part that can trigger the delay reactions; 
     - Values: value type `T` can be either 
-      - 1. `Function`: a function that decides how to update the delay channel and/or the state of the reactants.
+      1. `Function`: a function that decides how to update the delay channel and/or the state of the reactants.
       For example, one can define
       ```julia
       delay_trigger_affect! = function(integrator, rng)
@@ -19,7 +19,7 @@ $(FIELDS)
       end
       ``` 
       which means adding a random number (with a given random seed `rng`) in (0,1) to the first delay channel, and adding 1 individual to the second species.
-      - 2. `Pair` a pair type is a simplified update function for only changing the delay channel (which will render better performance). For example, setting `delay_trigger_affect! = [1=>τ]` is equivalent to 
+      2. `Pair` a pair type is a simplified update function for only changing the delay channel (which will render better performance). For example, setting `delay_trigger_affect! = [1=>τ]` is equivalent to 
       ```julia
       delay_trigger_affect! = function(integrator, rng)
           append!(integrator.de_chan[1], τ)
@@ -86,21 +86,23 @@ DelayJumpSet(delay_trigger,delay_complete,delay_interrupt) = DelayJumpSet(delay_
 
 
 """
-    function DelayJumpProblem(prob::DiscreteProblem, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpsets::DelayJumpSet, de_chan0)
+    function DelayJumpProblem(prob::DiscreteProblem, aggregator::AbstractDelayAggregatorAlgorithm, jumps::JumpSet, delayjumpset::DelayJumpSet, de_chan0)
 # Fields
 - `prob::DiscreteProblem`
 
     A discrete problem defined by the initial values.
+
 - `aggregator::AbstractDelayAggregatorAlgorithm`
 
-    The given algorithm to solve the DelaySSA problem.
+    A given algorithm to solve the DelaySSA problem.
 - `jumps::JumpSet`
 
     A jumpset containing the information of Markovian part.
 
-- `delayjumpsets::DelayJumpSet`
+- `delayjumpset::DelayJumpSet`
+   
+    A delay jumpset containing the information of Non-Markovian part.
 
-    Delay jumpsets containing the information of Non-Markovian part.
 - `de_chan0::Vector{Vector{T}}` 
 
     The initial condition of the delay channel.
