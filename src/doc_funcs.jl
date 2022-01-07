@@ -38,15 +38,13 @@ $(FIELDS)
 - `delay_interrupt_set::Vector{Int}`: collection of  indices of reactions that can interrupt the delay reactions.
 
 We take this [model](https://palmtree2013.github.io/DelaySSAToolkit.jl/dev/tutorials/delay_degradation/) for example.
-```math
-\begin{aligned}
-&\emptyset \xrightarrow{C} X_A \\
-&X_A \xrightarrow{\gamma} \emptyset\\
-&X_A \xrightarrow{\beta}  X_I, \text{ which triggers  } X_I\Rightarrow \emptyset \text{ after delay } \tau\\
-&X_I \xrightarrow{\gamma} \emptyset  
-\end{aligned}
-```
 ```julia
+# Take the following example 
+# C: 0 --> X_A
+# γ: X_A --> 0
+# β: X_A -->  X_I, which triggers  X_I ==> 0 after time τ
+# γ: X_I -->0 
+
 # the 3rd reaction will trigger a delay reaction
 delay_trigger_affect! = function (integrator, rng)
   append!(integrator.de_chan[1], τ)
