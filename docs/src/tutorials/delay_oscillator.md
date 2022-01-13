@@ -5,7 +5,7 @@ Let us study the following auto-regulatory network with delay. The model is defi
 \emptyset \xrightarrow{J_1(Y)} X,\\
  Y\xrightarrow{J_2(Y)} \emptyset.
 ```
-Note that $\emptyset \xrightarrow{J_1(Y)} X$ will trigger $X\Rightarrow Y$ after after a delay time $\tau$. 
+Note that $\emptyset \xrightarrow{J_1(Y)} X$ will trigger $X\Rightarrow Y$ after a delay time $\tau$. 
 
 According to [1], it's a simplified auto-regulatory network whereby a protein $X$ is transcribed by a gene, then it is transformed after a delay time $\tau$ into a mature protein $Y$, which binds the promoter and represses the transcription of $X$. The function $J_1(Y)$ and $J_2(Y)$ is defined as follows:
 ```math

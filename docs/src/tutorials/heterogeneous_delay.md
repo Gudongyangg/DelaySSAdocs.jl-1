@@ -6,7 +6,7 @@ We study the following model with delayed production
 \emptyset \xrightarrow{A_n} X \text{ triggers } X \Rightarrow Y \text{ after $\tau$ time},\\
 Y \xrightarrow{B_n} \emptyset,
 ```
-This model is studied in [1]. This delayed birth–death process can be used to model the dynamics of chemical species, such as proteins, that are produced through a sequence of reactions. We first consider fixed birth delays, $\tau_n$. It is assumed that across the population, production rates, $A_n$, degradation rates, $B_n$, and the fixed birth delays, $\tau_n$, follow a gamma distribution. A decrease in protein count is due to growth-induced dilution or enzymatic degradation, and is described by an instantaneous death process with rate $B_n$.
+This model is studied in [1]. This delayed birth–death process can be used to model the dynamics of chemical species, such as proteins, that are produced through a sequence of reactions. We first consider fixed birth delays, $\tau_n$, which are constant for a given cell but which vary across a population. It is assumed that across the population, production rates, $A_n$, degradation rates, $B_n$, and the fixed birth delays, $\tau_n$, follow a gamma distribution. A decrease in protein count is due to growth-induced dilution or enzymatic degradation, and is described by an instantaneous death process with rate $B_n$.
 
 ### Markovian part
 To define the Markovian part of the model, we set the model by
@@ -53,7 +53,7 @@ end
 ensprob1 = EnsembleProblem(jprob, prob_func = prob_func)
 @time ens1 = solve(ensprob1, SSAStepper(), EnsembleThreads(), trajectories = 40, saveat = 1.)
 ```
-For each simulation $i$ (modelling an individual cell), a set of parameters $A, B, τ$ is drawn Gamma distributions, where we use the parameters defined as in [1]. One only needs to reconstruct the `DelayJumpProblem` by assigning new values to the parameter `p=[A,B]` and `delay_trigger =  Dict(1=>[1=>τ])` for each simulation. This can be easily done by invoking the `remake` function.
+For each simulation $i$ (modelling an individual cell), a set of parameters $A, B, τ$ is drawn from Gamma distributions, where we use the parameters defined as in [1]. One only needs to reconstruct the `DelayJumpProblem` by assigning new values to the parameter `p=[A,B]` and `delay_trigger =  Dict(1=>[1=>τ])` for each simulation. This can be easily done by invoking the `remake` function.
 
 ## Visualisation
 We can plot the time evolution of 40 simulations.

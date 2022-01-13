@@ -16,7 +16,7 @@ rxs = [Reaction(ab^n/(1+b)^{n+1},nothing,[X],nothing,[n]) for n in 1:burst_sup]
 rxs = vcat(rxs)
 @named rs = ReactionSystem(rxs,t,[X],[a,b])
 ```
-In the example, we set $a=0.0282$ and $b=3.46$ and set the upper bound of as `burst_sup = 30`. This means we ignore all the reactions $ab^n/(1+b)^{n+1}:\emptyset \rightarrow nP$ for any $n > 30$ where the reaction rate $ab^n/(1+b)^{n+1} \sim 10^{-6}$. 
+In the example, we set $a=0.0282$ and $b=3.46$ and set the upper bound of the burst size as `burst_sup = 30`. This means we ignore all the reactions $ab^n/(1+b)^{n+1}:\emptyset \rightarrow nP$ for any $n > 30$ where the reaction rate $ab^n/(1+b)^{n+1} \sim 10^{-6}$. 
 We first convert the `ReactionSystem` to a `JumpSystem` and initialise the discrete problem by
 ```julia
 jumpsys = convert(JumpSystem, rs, combinatoric_ratelaws=false)
